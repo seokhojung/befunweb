@@ -1,22 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
 import { Header } from '@/components/Header';
-import { VideoSection } from '@/components/VideoSection';
 import { ProductCard } from '@/components/ProductCard';
+import { VideoSection } from '@/components/VideoSection';
 import { heroData } from '@/data/home';
 import { sampleProducts } from '@/data/products';
-import { analytics } from '@/lib/analytics';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function HomePage() {
-  useEffect(() => {
-    analytics.pageView('/', 'Befun 홈페이지');
-    analytics.heroViewed();
-  }, []);
-
-  // 추천 상품 (처음 6개)
+  const [isClient, setIsClient] = useState(false);
   const featuredProducts = sampleProducts.slice(0, 6);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <main className="min-h-screen" role="main">
@@ -108,10 +106,12 @@ export default function HomePage() {
         </div>
       </section>
       
-      {/* 스크린 리더 전용 설명 */}
-      <div className="sr-only" aria-live="polite">
-        Befun 홈페이지입니다. 히어로 섹션, 추천 상품 목록, 구성기 안내 섹션이 포함되어 있습니다.
-      </div>
+      {/* 스크린 리더 전용 설명 - 클라이언트에서만 렌더링 */}
+      {isClient && (
+        <div className="sr-only" aria-live="polite">
+          Befun 홈페이지입니다. 히어로 섹션, 추천 상품 목록, 구성기 안내 섹션이 포함되어 있습니다.
+        </div>
+      )}
     </main>
   );
 }

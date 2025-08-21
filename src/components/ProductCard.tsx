@@ -1,11 +1,33 @@
+'use client';
+
 import { Product } from '@/types';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // 가격 포맷팅을 정적으로 처리하여 Hydration Mismatch 방지
+  const formatPrice = (amount: number, currency: string) => {
+    // 숫자를 3자리마다 쉼표로 구분하는 정적 함수
+    const formatNumber = (num: number) => {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    };
+    
+    if (currency === 'KRW') {
+      return `₩${formatNumber(amount)}`;
+    }
+    return `$${formatNumber(amount)}`;
+  };
+
   return (
     <article 
       className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200 group"
@@ -51,10 +73,9 @@ export function ProductCard({ product }: ProductCardProps) {
             <span 
               id={`product-price-${product.id}`}
               className="font-bold text-lg"
-              aria-label={`가격: ${product.price.currency === 'KRW' ? '₩' : '$'}${product.price.amount.toLocaleString()}`}
+              aria-label={`가격: ${formatPrice(product.price.amount, product.price.currency)}`}
             >
-              {product.price.currency === 'KRW' ? '₩' : '$'}
-              {product.price.amount.toLocaleString()}
+              {formatPrice(product.price.amount, product.price.currency)}
             </span>
             <span 
               id={`product-category-${product.id}`}
@@ -77,10 +98,12 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       </Link>
       
-      {/* 스크린 리더 전용 설명 */}
-      <div className="sr-only">
-        {product.name} - {product.description}. 가격: {product.price.currency === 'KRW' ? '₩' : '$'}{product.price.amount.toLocaleString()}, 카테고리: {product.category}. 변형 옵션 {product.variants.length}개. 클릭하여 상세 정보를 확인하세요.
-      </div>
+      {/* 스크린 리더 전용 설명 - 클라이언트에서만 렌더링 */}
+      {isClient && (
+        <div className="sr-only">
+          {product.name} - {product.description}. 가격: {formatPrice(product.price.amount, product.price.currency)}, 카테고리: {product.category}. 변형 옵션 {product.variants.length}개. 클릭하여 상세 정보를 확인하세요.
+        </div>
+      )}
     </article>
   );
 }
