@@ -1,103 +1,117 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useEffect } from 'react';
+import { Header } from '@/components/Header';
+import { VideoSection } from '@/components/VideoSection';
+import { ProductCard } from '@/components/ProductCard';
+import { heroData } from '@/data/home';
+import { sampleProducts } from '@/data/products';
+import { analytics } from '@/lib/analytics';
+import Link from 'next/link';
+
+export default function HomePage() {
+  useEffect(() => {
+    analytics.pageView('/', 'Befun 홈페이지');
+    analytics.heroViewed();
+  }, []);
+
+  // 추천 상품 (처음 6개)
+  const featuredProducts = sampleProducts.slice(0, 6);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="min-h-screen" role="main">
+      <Header />
+      
+      {/* 히어로 섹션 */}
+      <VideoSection hero={heroData} />
+      
+      {/* 추천 상품 섹션 */}
+      <section 
+        className="py-16 bg-gray-50"
+        aria-labelledby="featured-products-title"
+      >
+        <div className="container mx-auto px-6">
+          <header className="text-center mb-12">
+            <h2 
+              id="featured-products-title"
+              className="text-3xl font-bold text-gray-900 mb-4"
+            >
+              추천 상품
+            </h2>
+            <p className="text-lg text-gray-600">
+              Befun에서 엄선한 인기 상품들을 만나보세요
+            </p>
+          </header>
+          
+          <div 
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"
+            role="grid"
+            aria-label="추천 상품 목록"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {featuredProducts.map((product) => (
+              <div 
+                key={product.id}
+                role="gridcell"
+              >
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+          
+          {/* 전체 상품 보기 링크 */}
+          <div className="text-center">
+            <Link 
+              href="/products"
+              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              aria-describedby="view-all-description"
+            >
+              전체 상품 보기
+            </Link>
+            <p 
+              id="view-all-description"
+              className="mt-2 text-sm text-gray-500"
+            >
+              더 많은 상품을 둘러보고 원하는 제품을 찾아보세요
+            </p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+      
+      {/* 구성기 CTA 섹션 */}
+      <section 
+        className="py-16 bg-blue-600 text-white"
+        aria-labelledby="configurator-cta-title"
+      >
+        <div className="container mx-auto px-6 text-center">
+          <h2 
+            id="configurator-cta-title"
+            className="text-3xl font-bold mb-4"
+          >
+            나만의 특별한 공간을 만들어보세요
+          </h2>
+          <p className="text-xl mb-8 opacity-90">
+            Befun 구성기를 사용하여 색상, 재질, 크기를 자유롭게 선택하고 완벽한 제품을 만들어보세요
+          </p>
+          <Link 
+            href="/configurator"
+            className="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600"
+            aria-describedby="configurator-description"
+          >
+            구성기 시작하기
+          </Link>
+          <p 
+            id="configurator-description"
+            className="mt-2 text-sm opacity-75"
+          >
+            구성기에서 상품을 커스터마이징하고 실시간으로 미리보기를 확인할 수 있습니다
+          </p>
+        </div>
+      </section>
+      
+      {/* 스크린 리더 전용 설명 */}
+      <div className="sr-only" aria-live="polite">
+        Befun 홈페이지입니다. 히어로 섹션, 추천 상품 목록, 구성기 안내 섹션이 포함되어 있습니다.
+      </div>
+    </main>
   );
 }
