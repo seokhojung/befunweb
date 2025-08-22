@@ -7,6 +7,7 @@ const baseProducts: Product[] = [
     name: 'Modern Chair',
     slug: 'modern-chair',
     images: ['/images/chair-1.jpg', '/images/chair-2.jpg'],
+    image: '/images/chair-1.jpg',
     variants: [
       {
         id: 'v1',
@@ -23,13 +24,16 @@ const baseProducts: Product[] = [
     ],
     price: { currency: 'KRW', amount: 150000 },
     description: '현대적인 디자인의 편안한 의자',
-    category: 'furniture'
+    category: 'furniture',
+    isNew: true,
+    freeDelivery: true
   },
   {
     id: '2',
     name: 'Designer Table',
     slug: 'designer-table',
     images: ['/images/table-1.jpg', '/images/table-2.jpg'],
+    image: '/images/table-1.jpg',
     variants: [
       {
         id: 'v3',
@@ -38,7 +42,9 @@ const baseProducts: Product[] = [
         price: { currency: 'KRW', amount: 300000 }
       }
     ],
-    price: { currency: 'KRW', amount: 300000 },
+    price: { currency: 'KRW', amount: 180000 },
+    originalPrice: { currency: 'KRW', amount: 300000 },
+    discount: 40,
     description: '독특한 디자인의 테이블',
     category: 'furniture'
   },
@@ -47,6 +53,7 @@ const baseProducts: Product[] = [
     name: 'Smart Lamp',
     slug: 'smart-lamp',
     images: ['/images/lamp-1.jpg'],
+    image: '/images/lamp-1.jpg',
     variants: [
       {
         id: 'v4',
@@ -57,13 +64,16 @@ const baseProducts: Product[] = [
     ],
     price: { currency: 'KRW', amount: 80000 },
     description: '스마트 기능이 탑재된 현대적인 램프',
-    category: 'lighting'
+    category: 'lighting',
+    isNew: true,
+    freeDelivery: true
   },
   {
     id: '4',
     name: 'Art Print',
     slug: 'art-print',
     images: ['/images/art-1.jpg'],
+    image: '/images/art-1.jpg',
     variants: [
       {
         id: 'v5',
@@ -81,6 +91,7 @@ const baseProducts: Product[] = [
     name: 'Plant Pot',
     slug: 'plant-pot',
     images: ['/images/pot-1.jpg'],
+    image: '/images/pot-1.jpg',
     variants: [
       {
         id: 'v6',
@@ -103,7 +114,7 @@ function generateAdditionalProducts(): Product[] {
   
   const additionalProducts: Product[] = [];
   
-  for (let i = 6; i <= 200; i++) {
+  for (let i = 6; i <= 30; i++) {
     const category = categories[i % categories.length];
     const material = materials[i % materials.length];
     const color = colors[i % colors.length];
@@ -112,11 +123,23 @@ function generateAdditionalProducts(): Product[] {
     const priceBase = ((i * 7) % 500000) + 20000;
     const variantPrice = ((i * 11) % 500000) + 20000;
     
+    // 할인 적용 (30% 확률)
+    const hasDiscount = i % 3 === 0;
+    const discount = hasDiscount ? 40 : 0;
+    const finalPrice = hasDiscount ? Math.round(priceBase * 0.6) : priceBase;
+    const originalPrice = hasDiscount ? priceBase : undefined;
+    
+    // 신상품 표시 (20% 확률)
+    const isNew = i % 5 === 0;
+    // 무료배송 (25% 확률)
+    const freeDelivery = i % 4 === 0;
+    
     const product: Product = {
       id: i.toString(),
       name: `${category.charAt(0).toUpperCase() + category.slice(1)} Item ${i}`,
       slug: `${category}-item-${i}`,
       images: [`/images/${category}-${i}.jpg`],
+      image: `/images/${category}-${i}.jpg`,
       variants: [
         {
           id: `v${i}`,
@@ -125,9 +148,13 @@ function generateAdditionalProducts(): Product[] {
           price: { currency: 'KRW', amount: variantPrice }
         }
       ],
-      price: { currency: 'KRW', amount: priceBase },
+      price: { currency: 'KRW', amount: finalPrice },
+      originalPrice: originalPrice ? { currency: 'KRW', amount: originalPrice } : undefined,
+      discount: discount > 0 ? discount : undefined,
       description: `${material} 소재의 ${color}색 ${category} 제품입니다.`,
-      category
+      category,
+      isNew: isNew || undefined,
+      freeDelivery: freeDelivery || undefined
     };
     
     additionalProducts.push(product);

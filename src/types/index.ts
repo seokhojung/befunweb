@@ -3,11 +3,16 @@ export type Product = {
   name: string;
   slug: string;
   images: string[];
+  image?: string; // 단일 이미지 (기존 images와 호환)
   variants: Variant[];
   price: Money;
+  originalPrice?: Money; // 할인 전 가격
+  discount?: number; // 할인율 (%)
   materials?: MaterialRef[];
   description?: string;
   category?: string;
+  isNew?: boolean; // 신상품 여부
+  freeDelivery?: boolean; // 무료배송 여부
 };
 
 export type Variant = {
@@ -47,8 +52,6 @@ export type Category = {
 export type HeroSection = {
   title: string;
   subtitle: string;
-  videoUrl: string;
-  placeholderImage: string;
   ctaText: string;
   ctaLink: string;
 };

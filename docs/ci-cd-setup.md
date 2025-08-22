@@ -155,3 +155,4 @@ npm run format:check
 - [Playwright 테스트 가이드](https://playwright.dev/docs/intro)
 - [Lighthouse CI 설정](https://github.com/GoogleChrome/lighthouse-ci)
 - [WCAG 2.2 가이드라인](https://www.w3.org/WAI/WCAG22/quickref/)
+

@@ -42,32 +42,36 @@ export default function ConfiguratorPage() {
         {/* iframe 로딩 실패 시 fallback */}
         <div 
           id="iframe-fallback"
-          className="hidden w-full h-full bg-gray-100 flex items-center justify-center"
+          style={{ display: 'none' }}
           role="alert"
           aria-live="polite"
         >
-          <div className="text-center p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              구성기를 로드할 수 없습니다
-            </h2>
-            <p className="text-gray-600 mb-6">
-              일시적인 문제로 구성기를 표시할 수 없습니다. 잠시 후 다시 시도해주세요.
-            </p>
-            <a
-              href="https://befun241204.netlify.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              aria-describedby="external-link-description"
-            >
-              새 창에서 구성기 열기
-            </a>
-            <p 
-              id="external-link-description"
-              className="mt-2 text-sm text-gray-500"
-            >
-              새 창에서 구성기를 열어 상품을 커스터마이징할 수 있습니다
-            </p>
+          <div className="bg-gray-100 min-h-screen">
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="text-center p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  구성기를 로드할 수 없습니다
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  일시적인 문제로 구성기를 표시할 수 없습니다. 잠시 후 다시 시도해주세요.
+                </p>
+                <a
+                  href="https://befun241204.netlify.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  aria-describedby="external-link-description"
+                >
+                  새 창에서 구성기 열기
+                </a>
+                <p 
+                  id="external-link-description"
+                  className="mt-2 text-sm text-gray-500"
+                >
+                  새 창에서 구성기를 열어 상품을 커스터마이징할 수 있습니다
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
