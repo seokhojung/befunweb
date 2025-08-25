@@ -4,6 +4,7 @@ import { HeroSection } from '@/components/HeroSection';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Sustainability } from '@/components/Sustainability';
+import { ProductColorSection } from '@/components/ProductColorSection';
 import { heroData } from '@/data/home';
 import { sampleProducts } from '@/data/products';
 
@@ -14,6 +15,9 @@ export default function Home() {
       <main>
         {/* 히어로 섹션 */}
         <HeroSection hero={heroData} />
+
+        {/* 컬러 선택 가능한 제품 섹션 */}
+        <ProductColorSection />
 
         {/* 브랜드 하이라이트 섹션 */}
         <BrandHighlights />

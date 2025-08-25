@@ -482,3 +482,124 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+/* ProductColorSection 스타일 */
+.md-max\:text-center {
+  @media (max-width: 767px) {
+    text-align: center;
+  }
+}
+
+.md-max\:p-24 {
+  @media (max-width: 767px) {
+    padding: 6rem;
+  }
+}
+
+.md-max\:opacity-50 {
+  @media (max-width: 767px) {
+    opacity: 0.5;
+  }
+}
+
+.md-max\:first\:opacity-100 {
+  @media (max-width: 767px) {
+    &:first-child {
+      opacity: 1;
+    }
+  }
+}
+
+.md-max\:last\:opacity-100 {
+  @media (max-width: 767px) {
+    &:last-child {
+      opacity: 1;
+    }
+  }
+}
+
+.md-max\:mt-4 {
+  @media (max-width: 767px) {
+    margin-top: 1rem;
+  }
+}
+
+.md-max\:mx-auto {
+  @media (max-width: 767px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* 글꼴 유틸리티 클래스 */
+.semibold-14 {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.semibold-18 {
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.semibold-32 {
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+.semibold-54 {
+  font-weight: 600;
+  font-size: 3.375rem;
+  line-height: 4rem;
+}
+
+/* 색상 유틸리티 */
+.text-neutral-750 {
+  color: #525252;
+}
+
+.text-neutral-900 {
+  color: #171717;
+}
+
+/* 컨테이너 유틸리티 */
+.grid-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid-container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-container {
+    padding: 0 3rem;
+  }
+}
+
+/* 흰색 배경을 투명하게 처리하는 스타일 */
+.white-background-transparent {
+  mix-blend-mode: multiply;
+  filter: brightness(1.1) contrast(1.2);
+}
+
+/* 더 강력한 흰색 제거 효과 */
+.white-background-transparent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 49%, rgba(255, 255, 255, 0.1) 50%, transparent 51%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
