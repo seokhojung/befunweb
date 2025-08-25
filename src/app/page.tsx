@@ -15,7 +15,7 @@ export default function Home() {
         <HeroSection hero={heroData} />
 
         {/* 추천 상품 그리드 섹션 */}
-        <ProductGrid products={sampleProducts.slice(0, 7)} title="Recommended for you" />
+        <ProductGrid products={sampleProducts.slice(0, 7)} title="Choose your colour. The rest is easy." />
 
         {/* 브랜드 하이라이트 섹션 */}
         <BrandHighlights />
@@ -33,7 +33,7 @@ export default function Home() {
               href="/configurator"
               className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
             >
-              구성기 시작하기
+              CONFIGURATOR
             </a>
           </div>
         </section>

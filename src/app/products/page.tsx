@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import { ProductCard } from '@/components/ProductCard';
 import { CategoryCard } from '@/components/CategoryCard';
 import { PromoBanner } from '@/components/PromoBanner';
@@ -16,7 +17,7 @@ export default function ProductsPage() {
   }, []);
 
   const handleProductSelect = (product: Product) => {
-    analytics.selectItem(product.id, product.name, product.category);
+    analytics.selectItem(product.id, product.name, product.category || 'uncategorized');
   };
 
   return (
@@ -26,17 +27,20 @@ export default function ProductsPage() {
       <div className="container mx-auto px-6 py-8">
         {/* 페이지 제목 */}
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">상품 목록</h1>
-          <p className="text-lg text-gray-600">Befun의 다양한 상품을 둘러보세요</p>
+        <br/>
+        <p className="text-lg text-gray-600">Befun의 다양한 상품을 둘러보세요.</p>
+        <br/>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">ALL PRODUCTS</h1>
+          
         </header>
 
         {/* Storage 카테고리 카드 */}
         <section className="mb-8">
-          <CategoryCard />
+          <CategoryCard name="Storage" />
         </section>
 
         {/* 구분선 */}
-        <div className="border-t border-gray-200 mb-8"></div>
+        <div className="border-t border-gray-400 mb-8"></div>
 
         {/* 프로모션 배너 */}
         <section className="mb-8">
@@ -67,6 +71,9 @@ export default function ProductsPage() {
           </p>
         </div>
       </div>
+      
+      {/* 푸터 */}
+      <Footer />
     </main>
   );
 }

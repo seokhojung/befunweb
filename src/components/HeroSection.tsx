@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 import { HeroSection as HeroSectionType } from '@/types';
 
 interface HeroSectionProps {
@@ -14,10 +16,20 @@ export function HeroSection({ hero }: HeroSectionProps) {
       role="banner"
       aria-label="히어로 섹션"
     >
-      {/* 배경 그라데이션 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+      {/* 배경 이미지 */}
+      <Image
+        src="/images/banners/home-hero.png"
+        alt="Hero Background"
+        fill
+        className="object-cover"
+        priority
+        quality={100}
+      />
+      
+      {/* 오버레이 그라데이션 */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50">
         {/* 추가 패턴 오버레이 */}
-        <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
             backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px)`,
             backgroundSize: '60px 60px'
@@ -41,19 +53,19 @@ export function HeroSection({ hero }: HeroSectionProps) {
             {hero.subtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link 
-              href={hero.ctaLink}
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black/40 shadow-lg hover:shadow-xl"
-              aria-describedby="hero-title hero-subtitle"
-            >
-              {hero.ctaText}
-            </Link>
-            <Link 
-              href="/products"
-              className="inline-block bg-transparent border-2 border-white text-white px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 hover:bg-white hover:text-gray-900 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white focus:ring-offset-2 focus:ring-offset-black/40"
-            >
-              상품 둘러보기
-            </Link>
+            <Button asChild size="lg" className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-black/40 shadow-lg hover:shadow-xl">
+              <Link 
+                href={hero.ctaLink}
+                aria-describedby="hero-title hero-subtitle"
+              >
+                {hero.ctaText}
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="bg-transparent border-2 border-white text-white px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 hover:bg-white hover:text-gray-900 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-white focus:ring-offset-2 focus:ring-offset-black/40">
+              <Link href="/products">
+                PRODUCTS
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

@@ -1,7 +1,5 @@
 'use client';
 
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Product } from '@/types';
 
 interface ProductCardProps {
@@ -113,7 +111,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
               {/* Free delivery 배지 (Tylko 스타일) */}
               {product.freeDelivery && (
                 <div 
-                  className="semibold-12 px-8 py-2 rounded-4 mr-4 absolute top-12 left-16 z-[15] flex py-[3px] !px-12 rounded-30"
+                  className="semibold-12 px-3 py-1 rounded-md mr-4 absolute top-12 left-16 z-[15] flex"
                   style={{
                     color: '#FF3C00',
                     backgroundColor: '#FFFF66'

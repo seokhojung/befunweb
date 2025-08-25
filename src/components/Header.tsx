@@ -38,8 +38,8 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* 로고 섹션 */}
         <div className="h-20 md:h-24 flex items-center">
-          <Link href="/" className="text-3xl md:text-4xl font-bold text-orange-500 hover:text-orange-600 transition-colors">
-            Befun
+          <Link href="/" className="text-3xl md:text-4xl font-bold text-green-500 hover:text-green-600 transition-colors">
+            BEFUN
           </Link>
         </div>
 
