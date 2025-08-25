@@ -4,6 +4,15 @@ const nextConfig: NextConfig = {
   // 출력 추적 루트 설정으로 권한 문제 해결
   outputFileTracingRoot: process.cwd(),
   
+  // outputFileTracingExcludes를 experimental 밖으로 이동
+  outputFileTracingExcludes: {
+    '*': [
+      'node_modules/@swc/core-linux-x64-gnu',
+      'node_modules/@swc/core-linux-x64-musl',
+      'node_modules/@esbuild/linux-x64',
+    ],
+  },
+  
   // 이미지 최적화 설정
   images: {
     remotePatterns: [
@@ -24,14 +33,7 @@ const nextConfig: NextConfig = {
   
   // 실험적 기능 비활성화
   experimental: {
-    // 출력 추적 비활성화 (권한 문제 해결)
-    outputFileTracingExcludes: {
-      '*': [
-        'node_modules/@swc/core-linux-x64-gnu',
-        'node_modules/@swc/core-linux-x64-musl',
-        'node_modules/@esbuild/linux-x64',
-      ],
-    },
+    // outputFileTracingExcludes 제거됨
   },
   
   // 웹팩 설정

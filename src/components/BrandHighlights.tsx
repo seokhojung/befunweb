@@ -86,6 +86,7 @@ export function BrandHighlights() {
     return () => {
       stopAutoPlay();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 일시정지 상태 변경 시 자동 슬라이드 재개/정지
@@ -95,6 +96,7 @@ export function BrandHighlights() {
     } else {
       startAutoPlay();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPaused]);
 
   const handleCardClick = (cardId: number) => {

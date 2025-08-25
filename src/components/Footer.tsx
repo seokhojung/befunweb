@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
@@ -36,7 +38,7 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">빠른 링크</h4>
             <ul className="space-y-2">
-              <li><a href="/products" className="text-gray-300 hover:text-white transition-colors">상품 보기</a></li>
+              <li><Link href="/products" className="text-gray-300 hover:text-white transition-colors">상품 보기</Link></li>
               <li><a href="/configurator" className="text-gray-300 hover:text-white transition-colors">가구 구성기</a></li>
               <li><a href="/about" className="text-gray-300 hover:text-white transition-colors">회사 소개</a></li>
               <li><a href="/contact" className="text-gray-300 hover:text-white transition-colors">문의하기</a></li>

@@ -1,7 +1,10 @@
 // GA4 이벤트 추적 유틸리티
+type GtagCommand = 'config' | 'event' | 'js' | 'set' | 'get';
+type GtagParams = Record<string, unknown>;
+
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
+    gtag: (command: GtagCommand, target: string, params?: GtagParams) => void;
   }
 }
 
@@ -11,7 +14,7 @@ export type GA4Event = {
   category: string;
   label?: string;
   value?: number;
-  custom_parameters?: Record<string, any>;
+  custom_parameters?: Record<string, unknown>;
 };
 
 // GA4 이벤트 전송 함수

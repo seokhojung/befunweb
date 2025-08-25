@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation';
-import { Header } from '@/components/Header';
 import { sampleProducts } from '@/data/products';
 import { Product } from '@/types';
 import { ProductDetailClient } from './ProductDetailClient';
