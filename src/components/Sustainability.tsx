@@ -1,7 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
-import Image from 'next/image';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Scrollbar } from 'swiper/modules';
@@ -16,7 +15,7 @@ interface SustainabilityCard {
   id: number;
   title: string;
   description: string;
-  icon: JSX.Element;
+  icon: React.ReactNode;
 }
 
 const sustainabilityCards: SustainabilityCard[] = [
@@ -178,17 +177,19 @@ export function Sustainability() {
                 ))}
               </Swiper>
 
-              {/* 커스텀 네비게이션 버튼 */}
-              <button className="swiper-button-prev-custom absolute -left-12 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow hidden lg:flex">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" strokeWidth="2" d="M15 6l-6 6 6 6"/>
-                </svg>
-              </button>
-              <button className="swiper-button-next-custom absolute -right-12 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow hidden lg:flex">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" strokeWidth="2" d="M9 6l6 6-6 6"/>
-                </svg>
-              </button>
+              {/* 커스텀 네비게이션 버튼 - 데스크톱만 표시 */}
+              <div className="hidden lg:block">
+                <div className="swiper-button-prev-custom absolute -left-12 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow cursor-pointer flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeWidth="2" d="M15 6l-6 6 6 6"/>
+                  </svg>
+                </div>
+                <div className="swiper-button-next-custom absolute -right-12 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-shadow cursor-pointer flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeWidth="2" d="M9 6l6 6-6 6"/>
+                  </svg>
+                </div>
+              </div>
 
               {/* 스크롤바 */}
               <div className="swiper-scrollbar-custom mt-6 h-1 bg-white/20 rounded-full relative">

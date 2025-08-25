@@ -3,6 +3,7 @@ import { BrandHighlights } from '@/components/BrandHighlights';
 import { HeroSection } from '@/components/HeroSection';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { Sustainability } from '@/components/Sustainability';
 import { heroData } from '@/data/home';
 import { sampleProducts } from '@/data/products';
 
@@ -14,14 +15,17 @@ export default function Home() {
         {/* 히어로 섹션 */}
         <HeroSection hero={heroData} />
 
-        {/* 추천 상품 그리드 섹션 */}
-        <ProductGrid products={sampleProducts.slice(0, 7)} title="Choose your colour. The rest is easy." />
-
         {/* 브랜드 하이라이트 섹션 */}
         <BrandHighlights />
+
+        {/* 추천 상품 그리드 섹션 */}
+        <ProductGrid products={sampleProducts.slice(0, 7)} title="우리의 인기 제품들" />
+
+        {/* 지속가능성 섹션 */}
+        <Sustainability />
         
         {/* 구성기 CTA 섹션 */}
-        <section className="py-24 bg-gray-50">
+        <section className="py-24 bg-gray-100">
           <div className="grid-container text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               나만의 가구를 디자인해보세요
@@ -31,7 +35,7 @@ export default function Home() {
             </p>
             <a
               href="/configurator"
-              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-block bg-green-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors"
             >
               CONFIGURATOR
             </a>

@@ -284,6 +284,33 @@
   }
 }
 
+/* BrandHighlights 카드 애니메이션 */
+.card-active-animation {
+  animation: card-expand 0.7s ease-in-out forwards;
+}
+
+.card-inactive-animation {
+  animation: card-collapse 0.7s ease-in-out forwards;
+}
+
+.right-animation {
+  animation: slide-in-right 0.7s ease-out forwards;
+}
+
+.active-before {
+  animation: slide-out-left 0.7s ease-out forwards;
+}
+
+/* 카드 컨텐츠 애니메이션 */
+.content-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+  animation-delay: 0.3s;
+}
+
+.content-fade-out {
+  animation: fade-out 0.3s ease-out forwards;
+}
+
 /* 모션 감소 설정 지원 */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -426,4 +453,32 @@
 .focus-indicator:focus {
   outline: none;
   box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px white;
+}
+
+/* Swiper 커스텀 스타일 */
+.sustainability-swiper .swiper-scrollbar {
+  position: relative;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+.sustainability-swiper .swiper-scrollbar-drag {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  cursor: grab;
+}
+
+.sustainability-swiper .swiper-scrollbar-drag:active {
+  cursor: grabbing;
+}
+
+.sustainability-swiper .swiper-slide {
+  height: auto;
+}
+
+/* Swiper 버튼 비활성화 스타일 */
+.swiper-button-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
