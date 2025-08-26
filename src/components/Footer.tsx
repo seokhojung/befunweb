@@ -7,9 +7,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* 회사 정보 */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-bold text-orange-500 mb-4">Befun</h3>
-            <p className="text-gray-300 mb-4 max-w-md">
-              당신만의 독특한 공간을 만들어주는 맞춤형 가구 브랜드입니다. 
+            <h3 className="text-3xl font-bold text-green-500 mb-3">Befun</h3>
+            <p className="text-gray-400 mb-4 max-w-md">
+              당신만의 공간을 만들어주는 맞춤형 가구 브랜드입니다. <br />
               품질과 디자인을 모두 만족시키는 가구를 제공합니다.
             </p>
             <div className="flex space-x-4">
@@ -40,8 +40,12 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link href="/products" className="text-gray-300 hover:text-white transition-colors">상품 보기</Link></li>
               <li><a href="/configurator" className="text-gray-300 hover:text-white transition-colors">가구 구성기</a></li>
-              <li><a href="/about" className="text-gray-300 hover:text-white transition-colors">회사 소개</a></li>
-              <li><a href="/contact" className="text-gray-300 hover:text-white transition-colors">문의하기</a></li>
+              <li><a href="https://uable.co.kr" target="_blank" 
+              rel="noopener noreferrer" className="text-gray-300     
+              hover:text-white transition-colors">회사 소개</a></li>
+              <li><a href="https://uable.co.kr/contact" target="_blank" 
+              rel="noopener noreferrer" className="text-gray-300     
+              hover:text-white transition-colors">문의 하기</a></li>
             </ul>
           </div>
 
@@ -49,10 +53,10 @@ export function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">고객 지원</h4>
             <ul className="space-y-2">
-              <li><a href="/help" className="text-gray-300 hover:text-white transition-colors">도움말</a></li>
-              <li><a href="/shipping" className="text-gray-300 hover:text-white transition-colors">배송 정보</a></li>
-              <li><a href="/returns" className="text-gray-300 hover:text-white transition-colors">반품 정책</a></li>
-              <li><a href="/size-guide" className="text-gray-300 hover:text-white transition-colors">사이즈 가이드</a></li>
+              <li><Link href="/not-found" className="text-gray-300 hover:text-white transition-colors">도움말</Link></li>
+              <li><Link href="/not-found" className="text-gray-300 hover:text-white transition-colors">배송 정보</Link></li>
+              <li><Link href="/not-found" className="text-gray-300 hover:text-white transition-colors">반품 정책</Link></li>
+              <li><Link href="/not-found" className="text-gray-300 hover:text-white transition-colors">사이즈 가이드</Link></li>
             </ul>
           </div>
         </div>
@@ -64,12 +68,12 @@ export function Footer() {
               © 2024 Befun. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="https://uable.co.kr/privacy" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">
                 개인정보처리방침
               </a>
-              <a href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
+              {/* <a href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
                 이용약관
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

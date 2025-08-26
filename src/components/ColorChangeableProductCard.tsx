@@ -16,20 +16,20 @@ export function ColorChangeableProductCard({ product, className = '' }: ColorCha
   const selectedColor = product.colors.find(color => color.id === selectedColorId) || product.colors[0];
 
   return (
-    <article className={`relative block overflow-hidden z-1 ${className}`}>
+    <article className={`relative block ${className}`}>
       {/* 제품 이미지 */}
-      <picture className="block md-max:p-24 w-full h-full transition-all duration-300 ease-out">
+      <div className="block w-full transition-all duration-300 ease-out">
         <div className="w-full aspect-square relative overflow-hidden bg-transparent">
           <Image
             src={selectedColor.imageUrl}
             alt={`${product.name} in ${selectedColor.name}`}
             fill
-            className="w-full h-full object-contain transition-all duration-300 white-background-transparent"
+            className="w-full h-full object-contain transition-all duration-300"
             loading="lazy"
             sizes="(max-width: 768px) 244px, (max-width: 1024px) 300px, 350px"
           />
         </div>
-      </picture>
+      </div>
 
       {/* 제품명 */}
       <h2 className="text-neutral-900 font-semibold text-lg text-center w-full mt-8">

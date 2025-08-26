@@ -70,12 +70,12 @@ export function HeroSection({ hero }: HeroSectionProps) {
         </div>
       </div>
       
-      {/* 스크롤 인디케이터 */}
+      {/* 스크롤 인디케이터
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
           <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
         </div>
-      </div>
+      </div> */}
       
       {/* 스크린 리더 전용 설명 */}
       <div className="sr-only" aria-live="polite">

@@ -29,12 +29,12 @@ export default function Home() {
         <Sustainability />
         
         {/* 구성기 CTA 섹션 */}
-        <section className="py-24 bg-gray-100">
+        <section className="py-12 md:py-20 lg:py-24 bg-gray-100">
           <div className="grid-container text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
               나만의 가구를 디자인해보세요
             </h2>
-            <p className="text-lg text-gray-600 mb-8">
+            <p className="text-base md:text-lg text-gray-600 mb-6 md:mb-8">
               맞춤형 가구 구성기로 당신만의 공간을 만들어보세요
             </p>
             <a

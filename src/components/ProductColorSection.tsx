@@ -25,7 +25,7 @@ export function ProductColorSection() {
         </p>
         
         <div className="flex flex-col md:flex-row justify-between items-start mb-12 lg:mb-16">
-          <h2 className="font-semibold text-3xl lg:text-5xl text-neutral-900 lg:pr-8 whitespace-nowrap">
+          <h2 className="font-semibold text-2xl md:text-3xl lg:text-5xl text-neutral-900 lg:pr-8">
             나만의 스타일을 완성하세요
           </h2>
           
@@ -38,22 +38,28 @@ export function ProductColorSection() {
         </div>
       </div>
 
-      {/* 제품 캐러셀 */}
-      <div className="relative group">
+      {/* 제품 그리드 - 모바일에서는 2x2 그리드, 데스크톱에서는 슬라이더 */}
+      <div className="block md:hidden">
+        {/* 모바일 그리드 */}
+        <div className="grid grid-cols-2 gap-4">
+          {colorChangeableProducts.slice(0, 4).map((product) => (
+            <ColorChangeableProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
+
+      {/* 데스크톱 캐러셀 */}
+      <div className="hidden md:block relative group">
         <Swiper
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
           }}
           modules={[Navigation]}
-          spaceBetween={8}
-          slidesPerView={1.2}
+          spaceBetween={16}
+          slidesPerView={3}
           centeredSlides={false}
           watchSlidesProgress={true}
           breakpoints={{
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 16,
-            },
             768: {
               slidesPerView: 3,
               spaceBetween: 16,
@@ -67,13 +73,10 @@ export function ProductColorSection() {
         >
           {colorChangeableProducts.map((product) => (
             <SwiperSlide key={product.id} className="!h-auto">
-              <div className="flex-shrink-0 w-full md:w-auto overflow-hidden md-max:opacity-50 md-max:first:opacity-100 md-max:last:opacity-100">
-                <ColorChangeableProductCard product={product} />
-              </div>
+              <ColorChangeableProductCard product={product} />
             </SwiperSlide>
           ))}
         </Swiper>
-
       </div>
     </div>
   );

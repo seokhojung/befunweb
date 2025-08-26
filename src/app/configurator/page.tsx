@@ -1,41 +1,26 @@
 'use client';
 
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 
 export default function ConfiguratorPage() {
   return (
     <main className="min-h-screen" role="main">
       <Header />
       
-      {/* 구성기 제목 섹션 */}
-      <section 
-        className="pt-20 pb-6 bg-gray-50"
-        aria-labelledby="configurator-title"
-      >
-        <div className="container mx-auto px-6 text-center">
-          <h1 
-            id="configurator-title"
-            className="text-3xl font-bold text-gray-900 mb-2"
-          >
-            Befun 구성기
-          </h1>
-          <p className="text-lg text-gray-600">
-            상품의 색상, 재질, 크기를 자유롭게 선택하여 나만의 특별한 제품을 만들어보세요
-          </p>
-        </div>
-      </section>
-      
       {/* 구성기 iframe 섹션 */}
       <section 
-        className="w-full h-screen"
+        className="w-full h-screen mt-3 overflow-hidden"
         aria-label="상품 구성기"
       >
         <iframe
           src="https://befun241204.netlify.app/"
           className="w-full h-full border-0"
+          style={{ overflow: 'hidden' }}
           title="Befun 구성기 - 상품 커스터마이징 도구"
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
           loading="lazy"
+          scrolling="no"
           aria-describedby="configurator-description"
         />
         
@@ -76,43 +61,7 @@ export default function ConfiguratorPage() {
         </div>
       </section>
       
-      {/* 구성기 사용 안내 */}
-      <section 
-        className="py-12 bg-white border-t"
-        aria-labelledby="usage-guide-title"
-      >
-        <div className="container mx-auto px-6">
-          <h2 
-            id="usage-guide-title"
-            className="text-2xl font-bold text-gray-900 mb-6 text-center"
-          >
-            구성기 사용 방법
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">1</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">상품 선택</h3>
-              <p className="text-gray-600">커스터마이징하고 싶은 상품을 선택하세요</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">2</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">옵션 선택</h3>
-              <p className="text-gray-600">색상, 재질, 크기 등 원하는 옵션을 선택하세요</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">3</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">결과 확인</h3>
-              <p className="text-gray-600">선택한 옵션으로 완성된 상품을 확인하세요</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Footer />
       
       {/* 스크린 리더 전용 설명 */}
       <div className="sr-only" aria-live="polite">
