@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '../ui';
@@ -9,31 +10,36 @@ interface HeroSectionProps {
   hero: HeroSectionType;
 }
 
-export function HeroSection({ hero }: HeroSectionProps) {
+export const HeroSection = React.memo(function HeroSection({ hero }: HeroSectionProps) {
+  // 스타일 객체 메모화
+  const backgroundPatternStyle = useMemo(() => ({
+    backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+    backgroundSize: '60px 60px'
+  }), []);
   return (
     <section 
       className="relative h-screen overflow-hidden"
       role="banner"
       aria-label="히어로 섹션"
     >
-      {/* 배경 이미지 */}
+      {/* 배경 이미지 최적화 */}
       <Image
         src="/images/banners/home-hero.png"
         alt="Hero Background"
         fill
         className="object-cover"
         priority
-        quality={100}
+        quality={85}
+        sizes="100vw"
+        placeholder="blur"
+        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyLli+kgV5xNvLMB5TqWPGz0GGGmn5K7Ws0dqwquZKOh4MKFrPX7XQpgsWoqLEePkP8AFvV6BaKnelAkNXY6/AeG9mEXoNS3lnA8p1LHjZ6DVqJhwp/aJ/U/FWUbhWCgf8A/9k="
       />
       
       {/* 오버레이 그라데이션 */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50">
         {/* 추가 패턴 오버레이 */}
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-            backgroundSize: '60px 60px'
-          }}></div>
+          <div className="absolute inset-0" style={backgroundPatternStyle}></div>
         </div>
       </div>
       
@@ -83,4 +89,12 @@ export function HeroSection({ hero }: HeroSectionProps) {
       </div>
     </section>
   );
-}
+}, (prevProps, nextProps) => {
+  // Hero 섹션은 거의 변하지 않으므로 얕은 비교로 충분
+  return (
+    prevProps.hero.title === nextProps.hero.title &&
+    prevProps.hero.subtitle === nextProps.hero.subtitle &&
+    prevProps.hero.ctaText === nextProps.hero.ctaText &&
+    prevProps.hero.ctaLink === nextProps.hero.ctaLink
+  );
+});

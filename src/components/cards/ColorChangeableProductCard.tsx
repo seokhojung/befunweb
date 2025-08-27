@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import { ColorChangeableProduct } from '@/data/colorProducts';
 
@@ -9,11 +9,28 @@ interface ColorChangeableProductCardProps {
   className?: string;
 }
 
-export function ColorChangeableProductCard({ product, className = '' }: ColorChangeableProductCardProps) {
+export const ColorChangeableProductCard = React.memo(function ColorChangeableProductCard({ 
+  product, 
+  className = '' 
+}: ColorChangeableProductCardProps) {
   const [selectedColorId, setSelectedColorId] = useState(product.defaultColorId);
   
-  // 선택된 컬러의 이미지 찾기
-  const selectedColor = product.colors.find(color => color.id === selectedColorId) || product.colors[0];
+  // 선택된 컬러의 이미지 찾기 (메모화)
+  const selectedColor = useMemo(() => 
+    product.colors.find(color => color.id === selectedColorId) || product.colors[0], 
+    [product.colors, selectedColorId]
+  );
+
+  // 이미지 사이즈 계산 메모화
+  const imageSizes = useMemo(() => 
+    "(max-width: 768px) 244px, (max-width: 1024px) 300px, 350px", 
+    []
+  );
+
+  // 색상 선택 핸들러 메모화
+  const handleColorChange = useCallback((colorId: string) => {
+    setSelectedColorId(colorId);
+  }, []);
   
   if (!selectedColor) {
     return null; // 컬러가 없는 경우 렌더링하지 않음
@@ -30,7 +47,7 @@ export function ColorChangeableProductCard({ product, className = '' }: ColorCha
             fill
             className="w-full h-full object-contain transition-all duration-300"
             loading="lazy"
-            sizes="(max-width: 768px) 244px, (max-width: 1024px) 300px, 350px"
+            sizes={imageSizes}
           />
         </div>
       </div>
@@ -57,7 +74,7 @@ export function ColorChangeableProductCard({ product, className = '' }: ColorCha
                 name={`color-${product.id}`}
                 value={color.id}
                 checked={selectedColorId === color.id}
-                onChange={() => setSelectedColorId(color.id)}
+                onChange={() => handleColorChange(color.id)}
                 className="sr-only"
               />
               <span 
@@ -75,4 +92,11 @@ export function ColorChangeableProductCard({ product, className = '' }: ColorCha
       )}
     </article>
   );
-}
+}, (prevProps, nextProps) => {
+  // 제품 ID와 색상 배열이 같으면 리렌더링 방지
+  return (
+    prevProps.product.id === nextProps.product.id &&
+    prevProps.product.colors.length === nextProps.product.colors.length &&
+    prevProps.className === nextProps.className
+  );
+});

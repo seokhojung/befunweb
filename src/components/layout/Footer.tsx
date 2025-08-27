@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { config } from '@/config';
 
 export function Footer() {
   return (
@@ -40,10 +41,10 @@ export function Footer() {
             <ul className="space-y-2">
               <li><Link href="/products" className="text-gray-300 hover:text-white transition-colors">상품 보기</Link></li>
               <li><a href="/configurator" className="text-gray-300 hover:text-white transition-colors">가구 구성기</a></li>
-              <li><a href="https://uable.co.kr" target="_blank" 
+              <li><a href={config.external.company.website} target="_blank" 
               rel="noopener noreferrer" className="text-gray-300     
               hover:text-white transition-colors">회사 소개</a></li>
-              <li><a href="https://uable.co.kr/contact" target="_blank" 
+              <li><a href={`${config.external.company.website}/contact`} target="_blank" 
               rel="noopener noreferrer" className="text-gray-300     
               hover:text-white transition-colors">문의 하기</a></li>
             </ul>
@@ -68,7 +69,7 @@ export function Footer() {
               © 2024 Befun. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="https://uable.co.kr/privacy" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href={`${config.external.company.website}/privacy`} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">
                 개인정보처리방침
               </a>
               {/* <a href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">

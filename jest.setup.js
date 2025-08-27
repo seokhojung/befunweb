@@ -44,18 +44,22 @@ jest.mock('next/navigation', () => ({
   },
 }))
 
-// Mock analytics
-jest.mock('@/lib/analytics', () => ({
-  analytics: {
-    pageView: jest.fn(),
-    heroViewed: jest.fn(),
-    viewItemList: jest.fn(),
-    selectItem: jest.fn(),
-    viewItem: jest.fn(),
-    addToCart: jest.fn(),
-    configChange: jest.fn(),
-  },
-}))
+// Mock analytics - conditional mock
+try {
+  jest.mock('@/lib/analytics', () => ({
+    analytics: {
+      pageView: jest.fn(),
+      heroViewed: jest.fn(),
+      viewItemList: jest.fn(),
+      selectItem: jest.fn(),
+      viewItem: jest.fn(),
+      addToCart: jest.fn(),
+      configChange: jest.fn(),
+    },
+  }))
+} catch (error) {
+  // Analytics mock failed, continuing without it
+}
 
 // Mock ReactPlayer
 jest.mock('react-player', () => {
@@ -81,3 +85,25 @@ global.matchMedia = jest.fn().mockImplementation(query => ({
   removeEventListener: jest.fn(),
   dispatchEvent: jest.fn(),
 }))
+
+// Mock IntersectionObserver
+global.IntersectionObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}))
+
+// Mock window.scrollTo
+Object.defineProperty(window, 'scrollTo', {
+  writable: true,
+  value: jest.fn(),
+})
+
+// Mock environment variables for tests
+process.env.NODE_ENV = 'test'
+process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = 'G-TEST123'
+process.env.NEXT_PUBLIC_ENABLE_ANALYTICS = 'false'
+process.env.NEXT_PUBLIC_DEBUG_MODE = 'true'
+process.env.NEXT_PUBLIC_API_URL = '/api'
+process.env.NEXT_PUBLIC_CONFIGURATOR_URL = 'https://test.example.com'
+process.env.NEXT_PUBLIC_COMPANY_WEBSITE = 'https://company.example.com'

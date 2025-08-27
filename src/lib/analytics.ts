@@ -1,3 +1,5 @@
+import { config } from '@/config';
+
 // GA4 이벤트 추적 유틸리티
 type GtagCommand = 'config' | 'event' | 'js' | 'set' | 'get';
 type GtagParams = Record<string, unknown>;
@@ -29,7 +31,7 @@ export const sendGA4Event = (event: GA4Event) => {
   }
   
   // 개발 환경에서 콘솔에 로그 출력
-  if (process.env.NODE_ENV === 'development') {
+  if (config.features.debugMode || config.isDevelopment) {
     console.log('GA4 Event:', event);
   }
 };
@@ -39,7 +41,7 @@ export const analytics = {
   // 페이지 뷰
   pageView: (page_path: string, page_title?: string) => {
     if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('config', process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!, {
+      window.gtag('config', config.analytics.measurementId!, {
         page_path,
         page_title,
       });

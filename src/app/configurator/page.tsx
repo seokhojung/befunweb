@@ -1,6 +1,7 @@
 'use client';
 
 import { Layout } from '@/components/layout';
+import { config } from '@/config';
 
 export default function ConfiguratorPage() {
   return (
@@ -12,7 +13,7 @@ export default function ConfiguratorPage() {
         aria-label="상품 구성기"
       >
         <iframe
-          src="https://befun241204.netlify.app/"
+          src={config.external.configurator.url}
           className="w-full h-full border-0"
           style={{ overflow: 'hidden' }}
           title="Befun 구성기 - 상품 커스터마이징 도구"
@@ -39,7 +40,7 @@ export default function ConfiguratorPage() {
                   일시적인 문제로 구성기를 표시할 수 없습니다. 잠시 후 다시 시도해주세요.
                 </p>
                 <a
-                  href="https://befun241204.netlify.app/"
+                  href={config.external.configurator.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"

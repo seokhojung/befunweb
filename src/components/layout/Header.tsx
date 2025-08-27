@@ -1,51 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useMenuToggle, useScrollDirection } from '@/hooks';
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  // useMenuToggle Hook으로 메뉴 로직 간소화
+  const { isOpen: isMenuOpen, getMenuProps, getButtonProps, close: closeMenu } = useMenuToggle({
+    closeOnOutsideClick: true,
+    closeOnEscape: true,
+  });
 
-  // 스크롤 방향과 위치를 추적하여 헤더 숨김/보임 처리
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // 위로 스크롤하면 헤더 보이기
-      if (currentScrollY < lastScrollY) {
-        setIsHeaderVisible(true);
-      } 
-      // 아래로 스크롤하면 헤더 숨기기 (일정 스크롤 후)
-      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsHeaderVisible(false);
-      }
-      
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
-  // 외부 클릭으로 메뉴 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isMenuOpen) {
-        const target = event.target as HTMLElement;
-        const menuButton = document.querySelector('[data-menu-button]');
-        const menuOverlay = document.querySelector('[data-menu-overlay]');
-        
-        if (menuButton && !menuButton.contains(target) && menuOverlay && !menuOverlay.contains(target)) {
-          setIsMenuOpen(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isMenuOpen]);
+  // useScrollDirection Hook으로 스크롤 감지 로직 간소화
+  const { isVisible: isHeaderVisible } = useScrollDirection({
+    threshold: 100,
+    throttleMs: 16,
+    initialVisible: true,
+    disableWhenAtTop: true,
+  });
 
   return (
     <header 
@@ -114,9 +85,8 @@ export function Header() {
 
           {/* 모바일 메뉴 버튼 - 모바일에서만 표시 */}
           <button 
-            data-menu-button
+            {...getButtonProps()}
             className="lg:hidden p-3 bg-black/50 backdrop-blur-md rounded-full hover:bg-black/60 transition-all duration-200 text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" className="w-5 h-5">
               <path stroke="currentColor" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -127,19 +97,19 @@ export function Header() {
         {/* 모바일 메뉴 오버레이 */}
         {isMenuOpen && (
           <div className="fixed inset-0 bg-black/20 z-[60] lg:hidden">
-            <div data-menu-overlay className="absolute right-4 top-20 bg-black/50 backdrop-blur-md rounded-2xl p-6 shadow-xl">
+            <div {...getMenuProps()} className="absolute right-4 top-20 bg-black/50 backdrop-blur-md rounded-2xl p-6 shadow-xl">
               <nav className="flex flex-col space-y-4">
                 <Link 
                   href="/products" 
                   className="text-white hover:text-gray-300 transition-colors duration-200 font-medium px-4 py-2 rounded-lg hover:bg-white/10"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={closeMenu}
                 >
                   Shop
                 </Link>
                 <Link 
                   href="/configurator" 
                   className="text-white hover:text-gray-300 transition-colors duration-200 font-medium px-4 py-2 rounded-lg hover:bg-white/10"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={closeMenu}
                 >
                   Configurator
                 </Link>
