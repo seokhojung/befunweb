@@ -1,12 +1,10 @@
 'use client';
 
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+import { Layout } from '@/components/layout';
 
 export default function ConfiguratorPage() {
   return (
-    <main className="min-h-screen" role="main">
-      <Header />
+    <Layout>
       
       {/* 구성기 iframe 섹션 */}
       <section 
@@ -61,12 +59,10 @@ export default function ConfiguratorPage() {
         </div>
       </section>
       
-      <Footer />
-      
       {/* 스크린 리더 전용 설명 */}
       <div className="sr-only" aria-live="polite">
         Befun 구성기 페이지입니다. 상품을 커스터마이징할 수 있는 도구가 포함되어 있습니다.
       </div>
-    </main>
+    </Layout>
   );
 }

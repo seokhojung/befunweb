@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+import { Layout } from '@/components/layout';
 import { ProductCard } from '@/components/ProductCard';
 import { CategoryCard } from '@/components/CategoryCard';
 import { PromoBanner } from '@/components/PromoBanner';
@@ -21,10 +20,8 @@ export default function ProductsPage() {
   };
 
   return (
-    <main className="min-h-screen pt-20" role="main">
-      <Header />
-      
-      <div className="container mx-auto px-6 py-8">
+    <Layout>
+      <div className="container mx-auto px-6 py-8 pt-20">
         {/* 페이지 제목 */}
         <header className="mb-8">
         <br/>
@@ -71,9 +68,6 @@ export default function ProductsPage() {
           </p>
         </div>
       </div>
-      
-      {/* 푸터 */}
-      <Footer />
-    </main>
+    </Layout>
   );
 }

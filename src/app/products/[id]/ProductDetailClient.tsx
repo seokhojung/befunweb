@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Header } from '@/components/Header';
+import { Layout } from '@/components/layout';
 import { analytics } from '@/lib/analytics';
 import { Product } from '@/types';
 
@@ -32,10 +32,9 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   };
 
   return (
-    <main className="min-h-screen pt-20" role="main">
-      <Header />
+    <Layout>
       
-      <div className="container mx-auto px-6 py-8">
+      <div className="container mx-auto px-6 py-8 pt-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* 상품 이미지 섹션 */}
           <section 
@@ -201,6 +200,6 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           </section>
         </div>
       </div>
-    </main>
+    </Layout>
   );
 }

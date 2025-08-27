@@ -1,14 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+import { Layout } from '@/components/layout';
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen flex flex-col bg-white">
-      <Header />
-      
+    <Layout>
       <div className="flex-1 flex items-center justify-center px-6 min-h-[400px] md:min-h-[600px]">
         <div className="text-center">
           {/* 심플한 404 */}
@@ -37,8 +34,6 @@ export default function NotFound() {
           </div>
         </div>
       </div>
-      
-      <Footer />
-    </main>
+    </Layout>
   );
 }
