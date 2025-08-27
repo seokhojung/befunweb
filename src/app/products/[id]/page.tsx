@@ -29,7 +29,7 @@ function generateProductJsonLd(product: Product) {
     name: product.name,
     description: product.description,
     image: product.images,
-    sku: product.variants[0]?.sku,
+    sku: product.variants?.[0]?.sku,
     brand: {
       '@type': 'Brand',
       name: 'Befun'

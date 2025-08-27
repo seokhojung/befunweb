@@ -1,57 +1,48 @@
-export type Product = {
-  id: string;
-  name: string;
-  slug: string;
-  images: string[];
-  image?: string; // 단일 이미지 (기존 images와 호환)
-  variants: Variant[];
-  price: Money;
-  originalPrice?: Money; // 할인 전 가격
-  discount?: number; // 할인율 (%)
-  materials?: MaterialRef[];
-  description?: string;
-  category?: string;
-  isNew?: boolean; // 신상품 여부
-  freeDelivery?: boolean; // 무료배송 여부
-};
+// Common types
+export * from './common';
 
-export type Variant = {
-  id: string;
-  options: Record<string, string>;
-  sku?: string;
-  price?: Money;
-};
+// Domain types
+export * from './products';
+export * from './categories';
+export * from './navigation';
 
-export type Money = {
-  currency: 'KRW' | 'USD';
-  amount: number;
-};
+// Component types
+export * from './components';
 
-export type MaterialRef = {
-  id: string;
-  name: string;
-  color?: string;
-  texture?: string;
-};
+// API types
+export * from './api';
 
-export type Configuration = {
-  productId: string;
-  selections: Record<string, string>;
-  price: Money;
-  timestamp: Date;
-};
+// 전역으로 자주 사용되는 타입들의 별칭 (하위 호환성 유지)
+export type {
+  BaseProduct,
+  ColorChangeableProduct,
+  Product,
+  ColorOption,
+  ProductVariant,
+  Configuration,
+  Money,
+  MaterialRef,
+} from './products';
 
-export type Category = {
-  id: string;
-  name: string;
-  slug: string;
-  description?: string;
-  image?: string;
-};
+export type {
+  Category,
+} from './categories';
 
-export type HeroSection = {
-  title: string;
-  subtitle: string;
-  ctaText: string;
-  ctaLink: string;
-};
+export type {
+  NavItem,
+} from './navigation';
+
+export type {
+  ComponentProps,
+} from './common';
+
+export type {
+  HeroSection,
+  LayoutProps,
+  ProductCardProps,
+  ColorChangeableProductCardProps,
+  CategoryCardProps,
+} from './components';
+
+// 기존 타입들과의 하위 호환성을 위한 별칭들
+export type { ProductVariant as Variant } from './products';

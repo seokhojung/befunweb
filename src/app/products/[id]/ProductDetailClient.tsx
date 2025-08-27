@@ -47,21 +47,21 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
               role="img"
               aria-label={`${product.name} 메인 이미지`}
             >
-              {product.images[0] && (
+              {product.images?.[0] && (
                 <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                  <span className="text-gray-500 text-lg">이미지: {product.images[0]}</span>
+                  <span className="text-gray-500 text-lg">이미지: {product.images?.[0]}</span>
                 </div>
               )}
             </div>
             
             {/* 썸네일 이미지들 */}
-            {product.images.length > 1 && (
+            {product.images && product.images.length > 1 && (
               <div 
                 className="grid grid-cols-4 gap-2"
                 role="list"
                 aria-label="상품 썸네일 이미지"
               >
-                {product.images.slice(1).map((image, index) => (
+                {product.images?.slice(1).map((image, index) => (
                   <div 
                     key={index} 
                     className="aspect-square bg-gray-100 rounded-md flex items-center justify-center"
@@ -107,7 +107,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
             </div>
 
             {/* 변형 옵션 */}
-            {product.variants.length > 1 && (
+            {product.variants && product.variants.length > 1 && (
               <div className="space-y-3">
                 <h3 className="text-lg font-semibold text-gray-900">옵션</h3>
                 <div 
@@ -115,7 +115,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                   role="list"
                   aria-label="상품 변형 옵션"
                 >
-                  {product.variants.map((variant) => (
+                  {product.variants?.map((variant) => (
                     <div 
                       key={variant.id} 
                       className="border border-gray-200 rounded-lg p-3"
