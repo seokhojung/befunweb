@@ -61,7 +61,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                 role="list"
                 aria-label="상품 썸네일 이미지"
               >
-                {product.images?.slice(1).map((image, index) => (
+                {product.images?.slice(1).map((_image, index) => (
                   <div 
                     key={index} 
                     className="aspect-square bg-gray-100 rounded-md flex items-center justify-center"

@@ -8,7 +8,7 @@ interface ProductCardProps {
 }
 
 // 더미 이미지 생성 함수 (Tylko 스타일)
-function generateDummyImage(productName: string, category?: string) {
+function generateDummyImage(_productName: string, category?: string) {
   const colors = {
     sofa: 'from-amber-100 to-amber-200',
     chaise_longue: 'from-blue-100 to-blue-200',

@@ -1,7 +1,7 @@
-import { Product } from '@/types';
+import { BaseProduct } from '@/types';
 
 // 기본 5개 상품
-const baseProducts: Product[] = [
+const baseProducts: BaseProduct[] = [
   {
     id: '1',
     name: 'Modern Chair',
@@ -107,17 +107,17 @@ const baseProducts: Product[] = [
 ];
 
 // 추가 상품 데이터 생성 함수
-function generateAdditionalProducts(): Product[] {
+function generateAdditionalProducts(): BaseProduct[] {
   const categories = ['furniture', 'lighting', 'art', 'garden', 'kitchen', 'bathroom', 'bedroom', 'office'];
   const materials = ['Wood', 'Metal', 'Glass', 'Plastic', 'Fabric', 'Leather', 'Ceramic', 'Stone'];
   const colors = ['Black', 'White', 'Brown', 'Gray', 'Blue', 'Green', 'Red', 'Yellow'];
   
-  const additionalProducts: Product[] = [];
+  const additionalProducts: BaseProduct[] = [];
   
   for (let i = 6; i <= 30; i++) {
-    const category = categories[i % categories.length];
-    const material = materials[i % materials.length];
-    const color = colors[i % colors.length];
+    const category = categories[i % categories.length] ?? 'furniture';
+    const material = materials[i % materials.length] ?? 'Wood';
+    const color = colors[i % colors.length] ?? 'Brown';
     
     // 결정적인 가격 생성 (Math.random() 대신)
     const priceBase = ((i * 7) % 500000) + 20000;
@@ -134,7 +134,7 @@ function generateAdditionalProducts(): Product[] {
     // 무료배송 (25% 확률)
     const freeDelivery = i % 4 === 0;
     
-    const product: Product = {
+    const product: BaseProduct = {
       id: i.toString(),
       name: `${category.charAt(0).toUpperCase() + category.slice(1)} Item ${i}`,
       slug: `${category}-item-${i}`,
@@ -149,12 +149,12 @@ function generateAdditionalProducts(): Product[] {
         }
       ],
       price: { currency: 'KRW', amount: finalPrice },
-      originalPrice: originalPrice ? { currency: 'KRW', amount: originalPrice } : undefined,
-      discount: discount > 0 ? discount : undefined,
+      ...(originalPrice && { originalPrice: { currency: 'KRW', amount: originalPrice } }),
+      ...(discount > 0 && { discount }),
       description: `${material} 소재의 ${color}색 ${category} 제품입니다.`,
       category,
-      isNew: isNew || undefined,
-      freeDelivery: freeDelivery || undefined
+      ...(isNew && { isNew: true }),
+      ...(freeDelivery && { freeDelivery: true })
     };
     
     additionalProducts.push(product);
@@ -163,7 +163,7 @@ function generateAdditionalProducts(): Product[] {
   return additionalProducts;
 }
 
-export const sampleProducts: Product[] = [
+export const sampleProducts: BaseProduct[] = [
   ...baseProducts,
   ...generateAdditionalProducts()
 ];

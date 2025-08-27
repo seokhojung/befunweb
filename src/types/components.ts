@@ -1,7 +1,7 @@
-import { ComponentProps, SelectableItem, SizeVariant, Orientation, Variant } from './common';
+import { SizeVariant, Orientation, Variant } from './common';
 import { BaseProduct, ColorChangeableProduct, Product } from './products';
 import { Category } from './categories';
-import { BaseProps, ActionableProps, ListProps, GridProps, FormProps, ModalProps } from './generics';
+import { BaseProps, ActionableProps, ListProps, GridProps, ModalProps } from './generics';
 
 // Generic 제품 카드 Props
 export interface ProductCardProps<T extends BaseProduct = BaseProduct> extends ActionableProps<T> {

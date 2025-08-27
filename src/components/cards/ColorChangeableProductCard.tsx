@@ -14,6 +14,10 @@ export function ColorChangeableProductCard({ product, className = '' }: ColorCha
   
   // 선택된 컬러의 이미지 찾기
   const selectedColor = product.colors.find(color => color.id === selectedColorId) || product.colors[0];
+  
+  if (!selectedColor) {
+    return null; // 컬러가 없는 경우 렌더링하지 않음
+  }
 
   return (
     <article className={`relative block ${className}`}>
