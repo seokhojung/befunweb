@@ -46,7 +46,7 @@ export function CategoryCard({
           <div className="aspect-[980/481] bg-transparent transition-transform group-hover:scale-[1.03] relative">
             {showIcon ? (
               <div className="w-full h-full flex items-center justify-center">
-                <IconComponent width={40} height={40} className="text-gray-400" />
+                <IconComponent size={40} className="text-gray-400" />
               </div>
             ) : (
               <Image 

@@ -1,24 +1,29 @@
-interface StorageIconProps {
-  width?: number;
-  height?: number;
-  className?: string;
-  color?: string;
-}
+import React from 'react';
+import { BaseIconProps, ICON_SIZES } from './types';
+
+export type StorageIconProps = BaseIconProps;
 
 export function StorageIcon({ 
-  width = 24, 
-  height = 24, 
-  className = "",
-  color = "currentColor" 
+  size = 'md', 
+  color = 'currentColor',
+  className = '',
+  'aria-label': ariaLabel = 'Storage',
+  'aria-hidden': ariaHidden,
+  ...props 
 }: StorageIconProps) {
+  const iconSize = typeof size === 'string' ? ICON_SIZES[size] : size;
   return (
     <svg 
-      width={width} 
-      height={height} 
+      width={iconSize} 
+      height={iconSize} 
       viewBox="0 0 24 24" 
       fill="none" 
       className={className}
+      aria-label={ariaLabel}
+      aria-hidden={ariaHidden}
+      role={ariaHidden ? undefined : 'img'}
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       {/* 캐비닛 본체 */}
       <rect 
@@ -74,19 +79,26 @@ export function StorageIcon({
 
 // 선반 스타일 스토리지 아이콘
 export function ShelfStorageIcon({ 
-  width = 24, 
-  height = 24, 
-  className = "",
-  color = "currentColor" 
+  size = 'md', 
+  color = 'currentColor',
+  className = '',
+  'aria-label': ariaLabel = 'Shelf Storage',
+  'aria-hidden': ariaHidden,
+  ...props 
 }: StorageIconProps) {
+  const iconSize = typeof size === 'string' ? ICON_SIZES[size] : size;
   return (
     <svg 
-      width={width} 
-      height={height} 
+      width={iconSize} 
+      height={iconSize} 
       viewBox="0 0 24 24" 
       fill="none" 
       className={className}
+      aria-label={ariaLabel}
+      aria-hidden={ariaHidden}
+      role={ariaHidden ? undefined : 'img'}
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       {/* 프레임 */}
       <rect 
@@ -117,19 +129,26 @@ export function ShelfStorageIcon({
 
 // 모던한 수납장 아이콘
 export function ModernStorageIcon({ 
-  width = 24, 
-  height = 24, 
-  className = "",
-  color = "currentColor" 
+  size = 'md', 
+  color = 'currentColor',
+  className = '',
+  'aria-label': ariaLabel = 'Modern Storage',
+  'aria-hidden': ariaHidden,
+  ...props 
 }: StorageIconProps) {
+  const iconSize = typeof size === 'string' ? ICON_SIZES[size] : size;
   return (
     <svg 
-      width={width} 
-      height={height} 
+      width={iconSize} 
+      height={iconSize} 
       viewBox="0 0 24 24" 
       fill="none" 
       className={className}
+      aria-label={ariaLabel}
+      aria-hidden={ariaHidden}
+      role={ariaHidden ? undefined : 'img'}
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       {/* 메인 프레임 */}
       <path 
