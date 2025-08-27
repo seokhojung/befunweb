@@ -2,9 +2,8 @@
 
 import { useEffect } from 'react';
 import { Layout } from '@/components/layout';
-import { ProductCard } from '@/components/ProductCard';
-import { CategoryCard } from '@/components/CategoryCard';
-import { PromoBanner } from '@/components/PromoBanner';
+import { ProductCard, CategoryCard } from '@/components/cards';
+import { PromoBanner } from '@/components/sections';
 import { sampleProducts } from '@/data/products';
 import { analytics } from '@/lib/analytics';
 import { Product } from '@/types';

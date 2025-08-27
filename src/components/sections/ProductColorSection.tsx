@@ -10,7 +10,7 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-import { ColorChangeableProductCard } from './ColorChangeableProductCard';
+import { ColorChangeableProductCard } from '../cards';
 import { colorChangeableProducts } from '@/data/colorProducts';
 
 export function ProductColorSection() {

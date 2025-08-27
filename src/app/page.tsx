@@ -1,8 +1,4 @@
-import { ProductGrid } from '@/components/ProductGrid';
-import { BrandHighlights } from '@/components/BrandHighlights';
-import { HeroSection } from '@/components/HeroSection';
-import { Sustainability } from '@/components/Sustainability';
-import { ProductColorSection } from '@/components/ProductColorSection';
+import { ProductGrid, BrandHighlights, HeroSection, Sustainability, ProductColorSection } from '@/components/sections';
 import { Layout } from '@/components/layout';
 import { heroData } from '@/data/home';
 import { sampleProducts } from '@/data/products';

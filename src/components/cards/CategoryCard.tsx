@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { StorageIcon, ShelfStorageIcon, ModernStorageIcon } from './icons/StorageIcon';
+import { StorageIcon, ShelfStorageIcon, ModernStorageIcon } from '../icons/StorageIcon';
 
 interface CategoryCardProps {
   name: string;

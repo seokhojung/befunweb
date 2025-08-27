@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '@/types';
-import { Button } from '@/components/ui/button';
-import { ProductCard } from '@/components/ProductCard';
+import { Button } from '../ui';
+import { ProductCard } from '../cards';
 
 interface ProductGridProps {
   products: Product[];

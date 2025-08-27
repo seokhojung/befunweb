@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { AnimatedCard } from '@/components/ui/animated-card';
-import { Badge } from '@/components/ui/badge';
+import { AnimatedCard, Badge } from '@/components/ui';
 
 interface BrandHighlight {
   id: number;

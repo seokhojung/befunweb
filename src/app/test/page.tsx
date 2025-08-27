@@ -1,5 +1,5 @@
 import { sampleProducts } from '@/data/products';
-import { ProductCard } from '@/components/ProductCard';
+import { ProductCard } from '@/components/cards';
 import { Layout } from '@/components/layout';
 
 export default function TestPage() {

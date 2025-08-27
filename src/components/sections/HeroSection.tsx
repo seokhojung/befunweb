@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import { Button } from '../ui';
 import { HeroSection as HeroSectionType } from '@/types';
 
 interface HeroSectionProps {

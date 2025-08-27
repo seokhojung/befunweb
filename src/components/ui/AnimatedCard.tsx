@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Card, CardContent } from "./card";
+import { Card, CardContent } from "./Card";
 
 interface AnimatedCardProps extends React.ComponentProps<typeof Card> {
   children: React.ReactNode;
