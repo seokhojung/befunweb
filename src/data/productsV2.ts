@@ -3,26 +3,151 @@ import { ProductV2, ColorVariantV2, ProductBadge } from '@/types/productsV2';
 // 실제 product-v2-example.txt에서 추출한 34개 제품 데이터
 // 모든 제품은 Bookcase 카테고리이며, 다양한 색상과 크기를 가집니다.
 
-// 일관된 이미지 경로 생성을 위한 헬퍼 함수
-const getImageIndex = (id: string): string => {
-  // ID 기반으로 일관된 이미지 인덱스 생성 (1-5)
-  const hash = id.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
-  return String((hash % 5) + 1).padStart(2, '0');
+// 실제 이미지 경로 매핑 테이블
+const productImageMappings: Record<string, {mainImage: string, hoverImage: string, colorThumbnails: string[]}> = {
+  'bookcase-white-doors': {
+    mainImage: '/images/products/v2/main/Living_room_08_living-room-Bookcase_EAPgDsY.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_50.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_22509_thumbnail.webp', 'unreal_24177_thumbnail.webp', 'unreal_16043_thumbnail.webp', 'unreal_29923_thumbnail.webp', 'unreal_29922_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_15643_thumbnail.webp']
+  },
+  'bookcase-grey-external-drawers': {
+    mainImage: '/images/products/v2/main/unreal_1075797.webp',
+    hoverImage: '/images/products/v2/hover/unreal_191615_KG3boPp.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_212_g9B0kiP_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_124425_1QAV6ST_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_187283_SkP60Hp_thumbnail.webp', 'unreal_197_uxXsipd_thumbnail.webp', 'unreal_245_iu7gxLQ_thumbnail.webp']
+  },
+  'bookcase-brown': {
+    mainImage: '/images/products/v2/main/unreal_124332_sj5uTGc.webp',
+    hoverImage: '/images/products/v2/hover/unreal_124331_ZWcuK1x.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_37_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_4489_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_124005_Cjj5HZz_thumbnail.webp']
+  },
+  'bookcase-grey-doors-storage': {
+    mainImage: '/images/products/v2/main/907_Tylko_Bookcase_Type1_FINAL_04_living-room-Bookcase.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_212_g9B0kiP.webp',
+    colorThumbnails: ['unreal_212_g9B0kiP_thumbnail.webp', 'unreal_28939_saUa3a5_thumbnail.webp', 'unreal_15264_thumbnail.webp', 'unreal_29928_thumbnail.webp', 'unreal_16988_thumbnail.webp', 'unreal_9070_thumbnail.webp', 'unreal_1064021_thumbnail.webp']
+  },
+  'bookcase-moss-green': {
+    mainImage: '/images/products/v2/main/unreal_1065155.webp',
+    hoverImage: '/images/products/v2/hover/unreal_1063961.webp',
+    colorThumbnails: ['unreal_1063961_thumbnail.webp', 'unreal_14040_KBEA61s_thumbnail.webp', 'unreal_1255995_thumbnail.webp', 'unreal_1255994_thumbnail.webp', 'unreal_1255992_thumbnail.webp', 'unreal_1255991_thumbnail.webp', 'unreal_8915_thumbnail.webp']
+  },
+  'bookcase-black': {
+    mainImage: '/images/products/v2/main/unreal_124426_cquVq4l.webp',
+    hoverImage: '/images/products/v2/hover/unreal_124425_1QAV6ST.webp',
+    colorThumbnails: ['unreal_124425_1QAV6ST_thumbnail.webp', 'unreal_50_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_4489_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_124005_Cjj5HZz_thumbnail.webp']
+  },
+  'bookcase-white-large': {
+    mainImage: '/images/products/v2/main/Living_room_08_living-room-Bookcase_EAPgDsY.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_50.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_22509_thumbnail.webp', 'unreal_24177_thumbnail.webp', 'unreal_16043_thumbnail.webp', 'unreal_29923_thumbnail.webp', 'unreal_29922_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_15643_thumbnail.webp']
+  },
+  'bookcase-light-wood': {
+    mainImage: '/images/products/v2/main/unreal_156041_2PFDZ4t.webp',
+    hoverImage: '/images/products/v2/hover/unreal_154634_uOy2I1O.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_37_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_4489_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_154634_uOy2I1O_thumbnail.webp']
+  },
+  'bookcase-burgundy-doors-drawers': {
+    mainImage: '/images/products/v2/main/unreal_370630.webp',
+    hoverImage: '/images/products/v2/hover/unreal_245_iu7gxLQ.webp',
+    colorThumbnails: ['unreal_245_iu7gxLQ_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_26013_thumbnail.webp', 'unreal_24319_thumbnail.webp', 'unreal_25417_thumbnail.webp', 'unreal_19319_thumbnail.webp', 'unreal_267_ruIqpOm_thumbnail.webp', 'unreal_17961_thumbnail.webp']
+  },
+  'bookcase-grey-compact': {
+    mainImage: '/images/products/v2/main/907_Tylko_Bookcase_Type1_FINAL_04_living-room-Bookcase.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_212_g9B0kiP.webp',
+    colorThumbnails: ['unreal_4489_thumbnail.webp', 'unreal_4804_5FlRoPy_thumbnail.webp', 'unreal_4490_thumbnail.webp', 'unreal_4487_thumbnail.webp', 'unreal_4486_thumbnail.webp', 'unreal_4485_thumbnail.webp', 'unreal_1064353_thumbnail.webp']
+  },
+  'bookcase-light-wood-drawers': {
+    mainImage: '/images/products/v2/main/unreal_1075727.webp',
+    hoverImage: '/images/products/v2/hover/unreal_154688_ZxTGNxY.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_37_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_4489_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_154722_Daa7Fxo_thumbnail.webp']
+  },
+  'bookcase-green-xl': {
+    mainImage: '/images/products/v2/main/unreal_1065155.webp',
+    hoverImage: '/images/products/v2/hover/unreal_1063961.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_37_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_1076615_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_124005_Cjj5HZz_thumbnail.webp']
+  },
+  'bookcase-white-external-drawers': {
+    mainImage: '/images/products/v2/main/unreal_124436_nBnrSSB.webp',
+    hoverImage: '/images/products/v2/hover/unreal_124435_Z0LwZty.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_212_g9B0kiP_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_124435_Z0LwZty_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_4489_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_124471_E20jniq_thumbnail.webp']
+  },
+  'bookcase-moss-green-doors': {
+    mainImage: '/images/products/v2/main/unreal_1065964.webp',
+    hoverImage: '/images/products/v2/hover/unreal_1064770.webp',
+    colorThumbnails: ['unreal_1064770_thumbnail.webp', 'unreal_50_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_37_thumbnail.webp', 'unreal_4489_thumbnail.webp', 'unreal_27059_thumbnail.webp']
+  },
+  'bookcase-premium-black': {
+    mainImage: '/images/products/v2/main/Modern_Classic_Matt_Black_Shelf_with_Drawers.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_37.webp',
+    colorThumbnails: ['unreal_37_thumbnail.webp', 'unreal_50_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_4489_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_124005_Cjj5HZz_thumbnail.webp']
+  },
+  'bookcase-beige-drawers-backpanels': {
+    mainImage: '/images/products/v2/main/unreal_124006_LAACU4l.webp',
+    hoverImage: '/images/products/v2/hover/unreal_124005_Cjj5HZz.webp',
+    colorThumbnails: ['unreal_50_thumbnail.webp', 'unreal_29921_thumbnail.webp', 'unreal_124331_ZWcuK1x_thumbnail.webp', 'unreal_37_thumbnail.webp', 'unreal_1063961_thumbnail.webp', 'unreal_4489_thumbnail.webp', 'unreal_27059_thumbnail.webp', 'unreal_124005_Cjj5HZz_thumbnail.webp']
+  }
 };
 
+// 색상 이름을 썸네일 인덱스로 매핑하는 헬퍼 함수
+const getColorIndex = (colorName: string): number => {
+  const colorMap: Record<string, number> = {
+    'White': 0,
+    'Grey': 1,
+    'Gray': 1,
+    'Brown': 2,
+    'Black': 3,
+    'Green': 4,
+    'Moss Green': 4,
+    'Blue': 5,
+    'Red': 6,
+    'Beige': 7
+  };
+  return colorMap[colorName] || 0;
+};
+
+// 실제 이미지 경로 생성 헬퍼 함수들
 const createColorVariant = (
-  id: string,
-  name: string
+  productSlug: string,
+  colorId: string,
+  name: string,
+  thumbnailFileOrIsDefault: string | boolean = false,
+  isDefault: boolean = false
 ): ColorVariantV2 => {
-  const imageIndex = getImageIndex(id);
+  // Handle backward compatibility for old function signature
+  let actualThumbnailFile: string;
+  let actualIsDefault: boolean;
+  
+  if (typeof thumbnailFileOrIsDefault === 'boolean') {
+    // Old signature: (productSlug, colorId, name, isDefault)
+    actualIsDefault = thumbnailFileOrIsDefault;
+    
+    // Get actual thumbnail from mapping table based on color index
+    const imageMapping = productImageMappings[productSlug];
+    if (imageMapping && imageMapping.colorThumbnails) {
+      // Map color names to thumbnail indices (approximate)
+      const colorIndex = getColorIndex(name);
+      actualThumbnailFile = imageMapping.colorThumbnails[colorIndex] || imageMapping.colorThumbnails[0] || `placeholder-${name.toLowerCase()}.webp`;
+    } else {
+      actualThumbnailFile = `placeholder-${name.toLowerCase()}.webp`;
+    }
+  } else {
+    // New signature: (productSlug, colorId, name, thumbnailFile, isDefault)
+    actualThumbnailFile = thumbnailFileOrIsDefault;
+    actualIsDefault = isDefault;
+  }
+  
+  // Get actual image paths from mapping table
+  const imageMapping = productImageMappings[productSlug];
+  const mainImagePath = imageMapping ? imageMapping.mainImage : `/images/products/v2/main/${productSlug}-main.jpg`;
+  const hoverImagePath = imageMapping ? imageMapping.hoverImage : `/images/products/v2/hover/${productSlug}-hover.webp`;
+  
   return {
-    id,
+    id: colorId,
     name,
-    thumbnail: `/images/placeholders/product-placeholder.svg`,
-    mainImage: `/images/products/v2/main/bookcase-${imageIndex}-main.svg`,
-    hoverImage: `/images/products/v2/hover/bookcase-${imageIndex}-hover.svg`,
-    isDefault: id.endsWith('-1'),
-    sku: `BKC-${id}`,
+    thumbnail: `/images/products/v2/colors/${actualThumbnailFile}`,
+    mainImage: mainImagePath,
+    hoverImage: hoverImagePath,
+    isDefault: actualIsDefault,
+    sku: `BKC-${colorId}`,
     availability: 'in_stock'
   };
 };
@@ -65,23 +190,19 @@ export const productsV2Data: ProductV2[] = [
     description: 'Tall slim white bookcase with doors - 103x243x24cm',
     category: 'bookcase',
     
-    // V2 전용 필드
-    mainImage: '/images/products/v2/main/bookcase-01-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-01-hover.svg',
+    // V2 전용 필드 - 실제 이미지 경로
+    mainImage: '/images/products/v2/main/Living_room_08_living-room-Bookcase_EAPgDsY.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_50.webp',
     
     colorVariants: [
-      createColorVariant('white-1', 'White'),
-      createColorVariant('brown-1', 'Brown'),
-      createColorVariant('grey-1', 'Grey'),
-      createColorVariant('black-1', 'Black'),
-      createColorVariant('green-1', 'Green'),
-      createColorVariant('blue-1', 'Blue'),
-      createColorVariant('pink-1', 'Pink'),
-      createColorVariant('beige-1', 'Beige'),
-      createColorVariant('sand-1', 'Sand'),
-      createColorVariant('moss-green-1', 'Moss Green'),
-      createColorVariant('light-wood-1', 'Light Wood'),
-      createColorVariant('dark-wood-1', 'Dark Wood')
+      createColorVariant('bookcase-white-doors', 'white-1', 'White', true),
+      createColorVariant('bookcase-white-doors', 'grey-1', 'Grey'),
+      createColorVariant('bookcase-white-doors', 'brown-1', 'Brown'),
+      createColorVariant('bookcase-white-doors', 'black-1', 'Black'),
+      createColorVariant('bookcase-white-doors', 'green-1', 'Green'),
+      createColorVariant('bookcase-white-doors', 'blue-1', 'Blue'),
+      createColorVariant('bookcase-white-doors', 'red-1', 'Red'),
+      createColorVariant('bookcase-white-doors', 'beige-1', 'Beige')
     ],
     defaultVariant: 'white-1',
     selectedVariant: 'white-1',
@@ -109,18 +230,18 @@ export const productsV2Data: ProductV2[] = [
     description: 'Large grey bookcase with external drawers - 243x137.8cm',
     category: 'bookcase',
     
-    mainImage: '/images/products/v2/main/bookcase-02-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-02-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_1075797.webp',
+    hoverImage: '/images/products/v2/hover/unreal_191615_KG3boPp.webp',
     
     colorVariants: [
-      createColorVariant('grey-2', 'Grey'),
-      createColorVariant('white-2', 'White'),
-      createColorVariant('brown-2', 'Brown'),
-      createColorVariant('black-2', 'Black'),
-      createColorVariant('green-2', 'Green'),
-      createColorVariant('light-wood-2', 'Light Wood'),
-      createColorVariant('beige-2', 'Beige'),
-      createColorVariant('sand-2', 'Sand')
+      createColorVariant('bookcase-grey-external-drawers', 'grey-2', 'Grey', true),
+      createColorVariant('bookcase-grey-external-drawers', 'white-2', 'White'),
+      createColorVariant('bookcase-grey-external-drawers', 'brown-2', 'Brown'),
+      createColorVariant('bookcase-grey-external-drawers', 'black-2', 'Black'),
+      createColorVariant('bookcase-grey-external-drawers', 'green-2', 'Green'),
+      createColorVariant('bookcase-grey-external-drawers', 'blue-2', 'Blue'),
+      createColorVariant('bookcase-grey-external-drawers', 'red-2', 'Red'),
+      createColorVariant('bookcase-grey-external-drawers', 'beige-2', 'Beige')
     ],
     defaultVariant: 'grey-2',
     selectedVariant: 'grey-2',
@@ -147,18 +268,18 @@ export const productsV2Data: ProductV2[] = [
     description: 'Large brown bookcase - 201x249x27cm',
     category: 'bookcase',
     
-    mainImage: '/images/products/v2/main/bookcase-03-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-03-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_124332_sj5uTGc.webp',
+    hoverImage: '/images/products/v2/hover/unreal_124331_ZWcuK1x.webp',
     
     colorVariants: [
-      createColorVariant('brown-3', 'Brown'),
-      createColorVariant('white-3', 'White'),
-      createColorVariant('grey-3', 'Grey'),
-      createColorVariant('black-3', 'Black'),
-      createColorVariant('green-3', 'Green'),
-      createColorVariant('light-wood-3', 'Light Wood'),
-      createColorVariant('dark-wood-3', 'Dark Wood'),
-      createColorVariant('beige-3', 'Beige')
+      createColorVariant('bookcase-brown', 'brown-3', 'Brown', true),
+      createColorVariant('bookcase-brown', 'white-3', 'White'),
+      createColorVariant('bookcase-brown', 'grey-3', 'Grey'),
+      createColorVariant('bookcase-brown', 'black-3', 'Black'),
+      createColorVariant('bookcase-brown', 'green-3', 'Green'),
+      createColorVariant('bookcase-brown', 'blue-3', 'Blue'),
+      createColorVariant('bookcase-brown', 'red-3', 'Red'),
+      createColorVariant('bookcase-brown', 'beige-3', 'Beige')
     ],
     defaultVariant: 'brown-3',
     selectedVariant: 'brown-3',
@@ -185,18 +306,18 @@ export const productsV2Data: ProductV2[] = [
     description: 'Large grey plywood bookcase with doors and bottom storage - 185x263x32cm',
     category: 'bookcase',
     
-    mainImage: '/images/products/v2/main/bookcase-04-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-04-hover.svg',
+    mainImage: '/images/products/v2/main/907_Tylko_Bookcase_Type1_FINAL_04_living-room-Bookcase.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_212_g9B0kiP.webp',
     
     colorVariants: [
-      createColorVariant('grey-4', 'Grey'),
-      createColorVariant('white-4', 'White'),
-      createColorVariant('brown-4', 'Brown'),
-      createColorVariant('black-4', 'Black'),
-      createColorVariant('green-4', 'Green'),
-      createColorVariant('light-wood-4', 'Light Wood'),
-      createColorVariant('moss-green-4', 'Moss Green'),
-      createColorVariant('beige-4', 'Beige')
+      createColorVariant('bookcase-grey-doors-storage', 'grey-4', 'Grey', true),
+      createColorVariant('bookcase-grey-doors-storage', 'white-4', 'White'),
+      createColorVariant('bookcase-grey-doors-storage', 'brown-4', 'Brown'),
+      createColorVariant('bookcase-grey-doors-storage', 'black-4', 'Black'),
+      createColorVariant('bookcase-grey-doors-storage', 'green-4', 'Green'),
+      createColorVariant('bookcase-grey-doors-storage', 'blue-4', 'Blue'),
+      createColorVariant('bookcase-grey-doors-storage', 'red-4', 'Red'),
+      createColorVariant('bookcase-grey-doors-storage', 'beige-4', 'Beige')
     ],
     defaultVariant: 'grey-4',
     selectedVariant: 'grey-4',
@@ -224,18 +345,18 @@ export const productsV2Data: ProductV2[] = [
     description: 'Compact moss green bookcase - 102x163cm',
     category: 'bookcase',
     
-    mainImage: '/images/products/v2/main/bookcase-05-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-05-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_1065155.webp',
+    hoverImage: '/images/products/v2/hover/unreal_1063961.webp',
     
     colorVariants: [
-      createColorVariant('moss-green-5', 'Moss Green'),
-      createColorVariant('white-5', 'White'),
-      createColorVariant('grey-5', 'Grey'),
-      createColorVariant('brown-5', 'Brown'),
-      createColorVariant('black-5', 'Black'),
-      createColorVariant('green-5', 'Green'),
-      createColorVariant('light-wood-5', 'Light Wood'),
-      createColorVariant('beige-5', 'Beige')
+      createColorVariant('bookcase-moss-green', 'moss-green-5', 'Moss Green', true),
+      createColorVariant('bookcase-moss-green', 'white-5', 'White'),
+      createColorVariant('bookcase-moss-green', 'grey-5', 'Grey'),
+      createColorVariant('bookcase-moss-green', 'brown-5', 'Brown'),
+      createColorVariant('bookcase-moss-green', 'black-5', 'Black'),
+      createColorVariant('bookcase-moss-green', 'green-5', 'Green'),
+      createColorVariant('bookcase-moss-green', 'blue-5', 'Blue'),
+      createColorVariant('bookcase-moss-green', 'beige-5', 'Beige')
     ],
     defaultVariant: 'moss-green-5',
     selectedVariant: 'moss-green-5',
@@ -262,21 +383,21 @@ export const productsV2Data: ProductV2[] = [
     description: 'Medium black bookcase - 136x197.8cm',
     category: 'bookcase',
     
-    mainImage: '/images/products/v2/main/bookcase-01-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-01-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_124426_cquVq4l.webp',
+    hoverImage: '/images/products/v2/hover/unreal_124425_1QAV6ST.webp',
     
     colorVariants: [
-      createColorVariant('black-6', 'Black'),
-      createColorVariant('white-6', 'White'),
-      createColorVariant('grey-6', 'Grey'),
-      createColorVariant('brown-6', 'Brown'),
-      createColorVariant('green-6', 'Green'),
-      createColorVariant('light-wood-6', 'Light Wood'),
-      createColorVariant('dark-wood-6', 'Dark Wood'),
-      createColorVariant('beige-6', 'Beige')
+      createColorVariant('bookcase-black', 'black-006', 'Black', true),
+      createColorVariant('bookcase-black', 'white-006', 'White'),
+      createColorVariant('bookcase-black', 'grey-006', 'Grey'),
+      createColorVariant('bookcase-black', 'brown-006', 'Brown'),
+      createColorVariant('bookcase-black', 'green-006', 'Green'),
+      createColorVariant('bookcase-black', 'blue-006', 'Blue'),
+      createColorVariant('bookcase-black', 'red-006', 'Red'),
+      createColorVariant('bookcase-black', 'beige-006', 'Beige')
     ],
-    defaultVariant: 'black-6',
-    selectedVariant: 'black-6',
+    defaultVariant: 'black-006',
+    selectedVariant: 'black-006',
     
     furnitureType: 'Edge',
     exactDimensions: '136 x 197.8 cm',
@@ -300,21 +421,21 @@ export const productsV2Data: ProductV2[] = [
     description: 'Extra large white bookcase - 308x227.8cm',
     category: 'bookcase',
     
-    mainImage: '/images/products/v2/main/bookcase-02-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-02-hover.svg',
+    mainImage: '/images/products/v2/main/Living_room_08_living-room-Bookcase_EAPgDsY.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_50.webp',
     
     colorVariants: [
-      createColorVariant('white-7', 'White'),
-      createColorVariant('grey-7', 'Grey'),
-      createColorVariant('brown-7', 'Brown'),
-      createColorVariant('black-7', 'Black'),
-      createColorVariant('green-7', 'Green'),
-      createColorVariant('light-wood-7', 'Light Wood'),
-      createColorVariant('beige-7', 'Beige'),
-      createColorVariant('sand-7', 'Sand')
+      createColorVariant('bookcase-white-large', 'white-007', 'White', true),
+      createColorVariant('bookcase-white-large', 'grey-007', 'Grey'),
+      createColorVariant('bookcase-white-large', 'brown-007', 'Brown'),
+      createColorVariant('bookcase-white-large', 'black-007', 'Black'),
+      createColorVariant('bookcase-white-large', 'green-007', 'Green'),
+      createColorVariant('bookcase-white-large', 'blue-007', 'Blue'),
+      createColorVariant('bookcase-white-large', 'red-007', 'Red'),
+      createColorVariant('bookcase-white-large', 'beige-007', 'Beige')
     ],
-    defaultVariant: 'white-7',
-    selectedVariant: 'white-7',
+    defaultVariant: 'white-007',
+    selectedVariant: 'white-007',
     
     furnitureType: 'Edge',
     exactDimensions: '308 x 227.8 cm',
@@ -338,21 +459,21 @@ export const productsV2Data: ProductV2[] = [
     description: 'Large light wood effect bookcase - 260x227.8cm',
     category: 'bookcase',
     
-    mainImage: '/images/products/v2/main/bookcase-03-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-03-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_156041_2PFDZ4t.webp',
+    hoverImage: '/images/products/v2/hover/unreal_154634_uOy2I1O.webp',
     
     colorVariants: [
-      createColorVariant('light-wood-8', 'Light Wood Effect'),
-      createColorVariant('white-8', 'White'),
-      createColorVariant('grey-8', 'Grey'),
-      createColorVariant('brown-8', 'Brown'),
-      createColorVariant('black-8', 'Black'),
-      createColorVariant('dark-wood-8', 'Dark Wood Effect'),
-      createColorVariant('beige-8', 'Beige'),
-      createColorVariant('green-8', 'Green')
+      createColorVariant('bookcase-light-wood', 'white-008', 'White', true),
+      createColorVariant('bookcase-light-wood', 'grey-008', 'Grey'),
+      createColorVariant('bookcase-light-wood', 'brown-008', 'Brown'),
+      createColorVariant('bookcase-light-wood', 'black-008', 'Black'),
+      createColorVariant('bookcase-light-wood', 'green-008', 'Green'),
+      createColorVariant('bookcase-light-wood', 'blue-008', 'Blue'),
+      createColorVariant('bookcase-light-wood', 'red-008', 'Red'),
+      createColorVariant('bookcase-light-wood', 'beige-008', 'Beige')
     ],
-    defaultVariant: 'light-wood-8',
-    selectedVariant: 'light-wood-8',
+    defaultVariant: 'white-008',
+    selectedVariant: 'white-008',
     
     furnitureType: 'Original Classic',
     exactDimensions: '260 x 227.8 cm',
@@ -376,20 +497,20 @@ export const productsV2Data: ProductV2[] = [
     slug: 'bookcase-burgundy-doors-drawers',
     description: 'Elegant burgundy bookcase with doors and drawers - 164x273cm',
     category: 'bookcase',
-    mainImage: '/images/products/v2/main/bookcase-04-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-04-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_370630.webp',
+    hoverImage: '/images/products/v2/hover/unreal_245_iu7gxLQ.webp',
     colorVariants: [
-      createColorVariant('burgundy-9', 'Burgundy'),
-      createColorVariant('white-9', 'White'),
-      createColorVariant('grey-9', 'Grey'),
-      createColorVariant('brown-9', 'Brown'),
-      createColorVariant('black-9', 'Black'),
-      createColorVariant('green-9', 'Green'),
-      createColorVariant('light-wood-9', 'Light Wood'),
-      createColorVariant('dark-wood-9', 'Dark Wood')
+      createColorVariant('bookcase-burgundy-doors-drawers', 'white-009', 'White', true),
+      createColorVariant('bookcase-burgundy-doors-drawers', 'grey-009', 'Grey'),
+      createColorVariant('bookcase-burgundy-doors-drawers', 'brown-009', 'Brown'),
+      createColorVariant('bookcase-burgundy-doors-drawers', 'black-009', 'Black'),
+      createColorVariant('bookcase-burgundy-doors-drawers', 'green-009', 'Green'),
+      createColorVariant('bookcase-burgundy-doors-drawers', 'blue-009', 'Blue'),
+      createColorVariant('bookcase-burgundy-doors-drawers', 'red-009', 'Red'),
+      createColorVariant('bookcase-burgundy-doors-drawers', 'beige-009', 'Beige')
     ],
-    defaultVariant: 'burgundy-9',
-    selectedVariant: 'burgundy-9',
+    defaultVariant: 'white-009',
+    selectedVariant: 'white-009',
     furnitureType: 'Original Classic',
     exactDimensions: '164 x 273 cm',
     colorName: 'Burgundy with Doors and Drawers',
@@ -408,20 +529,20 @@ export const productsV2Data: ProductV2[] = [
     slug: 'bookcase-grey-compact',
     description: 'Compact grey bookcase - 102x163cm',
     category: 'bookcase',
-    mainImage: '/images/products/v2/main/bookcase-05-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-05-hover.svg',
+    mainImage: '/images/products/v2/main/907_Tylko_Bookcase_Type1_FINAL_04_living-room-Bookcase.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_212_g9B0kiP.webp',
     colorVariants: [
-      createColorVariant('grey-10', 'Grey'),
-      createColorVariant('white-10', 'White'),
-      createColorVariant('brown-10', 'Brown'),
-      createColorVariant('black-10', 'Black'),
-      createColorVariant('green-10', 'Green'),
-      createColorVariant('light-wood-10', 'Light Wood'),
-      createColorVariant('beige-10', 'Beige'),
-      createColorVariant('sand-10', 'Sand')
+      createColorVariant('bookcase-grey-compact', 'white-010', 'White', true),
+      createColorVariant('bookcase-grey-compact', 'grey-010', 'Grey'),
+      createColorVariant('bookcase-grey-compact', 'brown-010', 'Brown'),
+      createColorVariant('bookcase-grey-compact', 'black-010', 'Black'),
+      createColorVariant('bookcase-grey-compact', 'green-010', 'Green'),
+      createColorVariant('bookcase-grey-compact', 'blue-010', 'Blue'),
+      createColorVariant('bookcase-grey-compact', 'red-010', 'Red'),
+      createColorVariant('bookcase-grey-compact', 'beige-010', 'Beige')
     ],
-    defaultVariant: 'grey-10',
-    selectedVariant: 'grey-10',
+    defaultVariant: 'white-010',
+    selectedVariant: 'white-010',
     furnitureType: 'Edge',
     exactDimensions: '102 x 163 cm',
     colorName: 'Grey',
@@ -440,20 +561,20 @@ export const productsV2Data: ProductV2[] = [
     slug: 'bookcase-light-wood-drawers',
     description: 'Light wood effect bookcase with external drawers - 224x167.8cm',
     category: 'bookcase',
-    mainImage: '/images/products/v2/main/bookcase-01-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-01-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_1075727.webp',
+    hoverImage: '/images/products/v2/hover/unreal_154688_ZxTGNxY.webp',
     colorVariants: [
-      createColorVariant('light-wood-11', 'Light Wood Effect'),
-      createColorVariant('white-11', 'White'),
-      createColorVariant('grey-11', 'Grey'),
-      createColorVariant('brown-11', 'Brown'),
-      createColorVariant('black-11', 'Black'),
-      createColorVariant('dark-wood-11', 'Dark Wood Effect'),
-      createColorVariant('beige-11', 'Beige'),
-      createColorVariant('green-11', 'Green')
+      createColorVariant('bookcase-light-wood-drawers', 'white-011', 'White', true),
+      createColorVariant('bookcase-light-wood-drawers', 'grey-011', 'Grey'),
+      createColorVariant('bookcase-light-wood-drawers', 'brown-011', 'Brown'),
+      createColorVariant('bookcase-light-wood-drawers', 'black-011', 'Black'),
+      createColorVariant('bookcase-light-wood-drawers', 'green-011', 'Green'),
+      createColorVariant('bookcase-light-wood-drawers', 'blue-011', 'Blue'),
+      createColorVariant('bookcase-light-wood-drawers', 'red-011', 'Red'),
+      createColorVariant('bookcase-light-wood-drawers', 'beige-011', 'Beige')
     ],
-    defaultVariant: 'light-wood-11',
-    selectedVariant: 'light-wood-11',
+    defaultVariant: 'white-011',
+    selectedVariant: 'white-011',
     furnitureType: 'Edge',
     exactDimensions: '224 x 167.8 cm',
     colorName: 'Light Wood Effect with External Drawers',
@@ -472,20 +593,20 @@ export const productsV2Data: ProductV2[] = [
     slug: 'bookcase-green-xl',
     description: 'Extra large green bookcase - 324x197.8cm',
     category: 'bookcase',
-    mainImage: '/images/products/v2/main/bookcase-02-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-02-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_1065155.webp',
+    hoverImage: '/images/products/v2/hover/unreal_1063961.webp',
     colorVariants: [
-      createColorVariant('green-12', 'Green'),
-      createColorVariant('white-12', 'White'),
-      createColorVariant('grey-12', 'Grey'),
-      createColorVariant('brown-12', 'Brown'),
-      createColorVariant('black-12', 'Black'),
-      createColorVariant('moss-green-12', 'Moss Green'),
-      createColorVariant('light-wood-12', 'Light Wood'),
-      createColorVariant('beige-12', 'Beige')
+      createColorVariant('bookcase-green-xl', 'white-012', 'White', true),
+      createColorVariant('bookcase-green-xl', 'grey-012', 'Grey'),
+      createColorVariant('bookcase-green-xl', 'brown-012', 'Brown'),
+      createColorVariant('bookcase-green-xl', 'black-012', 'Black'),
+      createColorVariant('bookcase-green-xl', 'green-012', 'Green'),
+      createColorVariant('bookcase-green-xl', 'blue-012', 'Blue'),
+      createColorVariant('bookcase-green-xl', 'red-012', 'Red'),
+      createColorVariant('bookcase-green-xl', 'beige-012', 'Beige')
     ],
-    defaultVariant: 'green-12',
-    selectedVariant: 'green-12',
+    defaultVariant: 'white-012',
+    selectedVariant: 'white-012',
     furnitureType: 'Edge',
     exactDimensions: '324 x 197.8 cm',
     colorName: 'Green',
@@ -505,20 +626,20 @@ export const productsV2Data: ProductV2[] = [
     slug: 'bookcase-white-external-drawers',
     description: 'White bookcase with external drawers - 114x197.8cm',
     category: 'bookcase',
-    mainImage: '/images/products/v2/main/bookcase-03-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-03-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_124436_nBnrSSB.webp',
+    hoverImage: '/images/products/v2/hover/unreal_124435_Z0LwZty.webp',
     colorVariants: [
-      createColorVariant('white-13', 'White'),
-      createColorVariant('grey-13', 'Grey'),
-      createColorVariant('brown-13', 'Brown'),
-      createColorVariant('black-13', 'Black'),
-      createColorVariant('green-13', 'Green'),
-      createColorVariant('light-wood-13', 'Light Wood'),
-      createColorVariant('beige-13', 'Beige'),
-      createColorVariant('sand-13', 'Sand')
+      createColorVariant('bookcase-white-external-drawers', 'white-013', 'White', true),
+      createColorVariant('bookcase-white-external-drawers', 'grey-013', 'Grey'),
+      createColorVariant('bookcase-white-external-drawers', 'brown-013', 'Brown'),
+      createColorVariant('bookcase-white-external-drawers', 'black-013', 'Black'),
+      createColorVariant('bookcase-white-external-drawers', 'green-013', 'Green'),
+      createColorVariant('bookcase-white-external-drawers', 'blue-013', 'Blue'),
+      createColorVariant('bookcase-white-external-drawers', 'red-013', 'Red'),
+      createColorVariant('bookcase-white-external-drawers', 'beige-013', 'Beige')
     ],
-    defaultVariant: 'white-13',
-    selectedVariant: 'white-13',
+    defaultVariant: 'white-013',
+    selectedVariant: 'white-013',
     furnitureType: 'Edge',
     exactDimensions: '114 x 197.8 cm',
     colorName: 'White with External Drawers',
@@ -537,20 +658,20 @@ export const productsV2Data: ProductV2[] = [
     slug: 'bookcase-moss-green-doors',
     description: 'Tall moss green bookcase with doors - 150x283cm',
     category: 'bookcase',
-    mainImage: '/images/products/v2/main/bookcase-04-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-04-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_1065964.webp',
+    hoverImage: '/images/products/v2/hover/unreal_1064770.webp',
     colorVariants: [
-      createColorVariant('moss-green-14', 'Moss Green'),
-      createColorVariant('white-14', 'White'),
-      createColorVariant('grey-14', 'Grey'),
-      createColorVariant('brown-14', 'Brown'),
-      createColorVariant('black-14', 'Black'),
-      createColorVariant('green-14', 'Green'),
-      createColorVariant('light-wood-14', 'Light Wood'),
-      createColorVariant('dark-wood-14', 'Dark Wood')
+      createColorVariant('bookcase-moss-green-doors', 'green-014', 'Green', true),
+      createColorVariant('bookcase-moss-green-doors', 'white-014', 'White'),
+      createColorVariant('bookcase-moss-green-doors', 'grey-014', 'Grey'),
+      createColorVariant('bookcase-moss-green-doors', 'brown-014', 'Brown'),
+      createColorVariant('bookcase-moss-green-doors', 'black-014', 'Black'),
+      createColorVariant('bookcase-moss-green-doors', 'blue-014', 'Blue'),
+      createColorVariant('bookcase-moss-green-doors', 'red-014', 'Red'),
+      createColorVariant('bookcase-moss-green-doors', 'beige-014', 'Beige')
     ],
-    defaultVariant: 'moss-green-14',
-    selectedVariant: 'moss-green-14',
+    defaultVariant: 'green-014',
+    selectedVariant: 'green-014',
     furnitureType: 'Original Modern',
     exactDimensions: '150 x 283 cm',
     colorName: 'Moss Green with Doors',
@@ -570,20 +691,20 @@ export const productsV2Data: ProductV2[] = [
     slug: 'bookcase-premium-black',
     description: 'Premium black bookcase with doors and drawers - 142x163cm',
     category: 'bookcase',
-    mainImage: '/images/products/v2/main/bookcase-05-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-05-hover.svg',
+    mainImage: '/images/products/v2/main/Modern_Classic_Matt_Black_Shelf_with_Drawers.jpg',
+    hoverImage: '/images/products/v2/hover/unreal_37.webp',
     colorVariants: [
-      createColorVariant('black-15', 'Premium Black'),
-      createColorVariant('white-15', 'White'),
-      createColorVariant('grey-15', 'Grey'),
-      createColorVariant('brown-15', 'Brown'),
-      createColorVariant('green-15', 'Green'),
-      createColorVariant('light-wood-15', 'Light Wood'),
-      createColorVariant('dark-wood-15', 'Dark Wood'),
-      createColorVariant('beige-15', 'Beige')
+      createColorVariant('bookcase-premium-black', 'black-015', 'Black', true),
+      createColorVariant('bookcase-premium-black', 'white-015', 'White'),
+      createColorVariant('bookcase-premium-black', 'grey-015', 'Grey'),
+      createColorVariant('bookcase-premium-black', 'brown-015', 'Brown'),
+      createColorVariant('bookcase-premium-black', 'green-015', 'Green'),
+      createColorVariant('bookcase-premium-black', 'blue-015', 'Blue'),
+      createColorVariant('bookcase-premium-black', 'red-015', 'Red'),
+      createColorVariant('bookcase-premium-black', 'beige-015', 'Beige')
     ],
-    defaultVariant: 'black-15',
-    selectedVariant: 'black-15',
+    defaultVariant: 'black-015',
+    selectedVariant: 'black-015',
     furnitureType: 'Original Classic',
     exactDimensions: '142 x 163 cm',
     colorName: 'Premium Black with Doors and Drawers',
@@ -605,20 +726,20 @@ export const productsV2Data: ProductV2[] = [
     slug: 'bookcase-beige-drawers-backpanels',
     description: 'Large beige bookcase with drawers and backpanels - 230x233cm',
     category: 'bookcase',
-    mainImage: '/images/products/v2/main/bookcase-01-main.svg',
-    hoverImage: '/images/products/v2/hover/bookcase-01-hover.svg',
+    mainImage: '/images/products/v2/main/unreal_124006_LAACU4l.webp',
+    hoverImage: '/images/products/v2/hover/unreal_124005_Cjj5HZz.webp',
     colorVariants: [
-      createColorVariant('beige-34', 'Beige'),
-      createColorVariant('white-34', 'White'),
-      createColorVariant('grey-34', 'Grey'),
-      createColorVariant('brown-34', 'Brown'),
-      createColorVariant('black-34', 'Black'),
-      createColorVariant('green-34', 'Green'),
-      createColorVariant('light-wood-34', 'Light Wood'),
-      createColorVariant('sand-34', 'Sand')
+      createColorVariant('bookcase-beige-drawers-backpanels', 'white-034', 'White', true),
+      createColorVariant('bookcase-beige-drawers-backpanels', 'grey-034', 'Grey'),
+      createColorVariant('bookcase-beige-drawers-backpanels', 'brown-034', 'Brown'),
+      createColorVariant('bookcase-beige-drawers-backpanels', 'black-034', 'Black'),
+      createColorVariant('bookcase-beige-drawers-backpanels', 'green-034', 'Green'),
+      createColorVariant('bookcase-beige-drawers-backpanels', 'blue-034', 'Blue'),
+      createColorVariant('bookcase-beige-drawers-backpanels', 'red-034', 'Red'),
+      createColorVariant('bookcase-beige-drawers-backpanels', 'beige-034', 'Beige')
     ],
-    defaultVariant: 'beige-34',
-    selectedVariant: 'beige-34',
+    defaultVariant: 'white-034',
+    selectedVariant: 'white-034',
     furnitureType: 'Original Classic',
     exactDimensions: '230 x 233 cm',
     colorName: 'Beige with Drawers and Backpanels',

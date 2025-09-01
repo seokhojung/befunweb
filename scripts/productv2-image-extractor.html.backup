@@ -133,7 +133,6 @@
             <button onclick="downloadAsZip()" style="background: #28a745;">📦 ZIP 파일로 다운로드 (폴더 구조 포함)</button>
             <button onclick="generateDirectDownloadLinks()" style="background: #17a2b8;">🔗 직접 다운로드 링크 생성</button>
             <button onclick="generateConsoleScript()" style="background: #6f42c1;">🤖 브라우저 콘솔 스크립트 생성</button>
-            <button onclick="generateOfflineDownloadPage()" style="background: #e83e8c;">💾 오프라인 다운로드 페이지 생성</button>
             <button onclick="generateColorSwatchScript()">🎨 색상 스와치 스크립트</button>
         </div>
     </div>
@@ -409,7 +408,7 @@
                         ${product.mainImage ? `
                             <div>
                                 <img src="${product.mainImage}" alt="메인 이미지" loading="lazy">
-                                <br><a href="${product.mainImage}" download="${product.id}-main.jpg" style="color: #007bff; text-decoration: none;">📥 Main 다운로드</a>
+                                <br><a href="${product.mainImage}" class="download-link" target="_blank">Main 다운로드</a>
                                 <small>→ <code>${product.id}-main.webp</code></small>
                             </div>
                         ` : ''}
@@ -417,7 +416,7 @@
                         ${product.instagramImage ? `
                             <div>
                                 <img src="${product.instagramImage}" alt="호버 이미지" loading="lazy">
-                                <br><a href="${product.instagramImage}" download="${product.id}-hover.webp" style="color: #28a745; text-decoration: none;">📥 Hover 다운로드</a>
+                                <br><a href="${product.instagramImage}" class="download-link" target="_blank">Hover 다운로드</a>
                                 <small>→ <code>${product.id}-hover.webp</code></small>
                             </div>
                         ` : ''}
@@ -430,7 +429,7 @@
                                         <div>
                                             <img src="${variant.thumbnail}" alt="${variant.name}" class="color-swatch">
                                             <br><small>${variant.name}</small>
-                                            <br><a href="${variant.thumbnail}" download="${product.id}-${variant.name.toLowerCase().replace(/\s+/g, '-')}.webp" style="color: #ffc107; text-decoration: none;">📥 ${variant.name}</a>
+                                            <br><a href="${variant.thumbnail}" class="download-link" target="_blank">스와치</a>
                                         </div>
                                     `).join('')}
                                 </div>
@@ -1256,8 +1255,8 @@ ${extractedProducts.length}개 제품의 이미지를 폴더 구조에 맞게 �
                     html += `
                         <div style="margin: 10px 0;">
                             <strong>📸 메인 이미지:</strong><br>
-                            <a href="${product.mainImage}" download="${product.id}-main.${extension}" style="display: inline-block; padding: 8px 16px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; margin: 5px 0;" onclick="setTimeout(() => window.focus(), 100)">
-                                📥 ${product.id}-main.${extension}
+                            <a href="${product.mainImage}" download="${product.id}-main.${extension}" style="display: inline-block; padding: 8px 16px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; margin: 5px 0;">
+                                다운로드: ${product.id}-main.${extension}
                             </a>
                             <p style="font-size: 12px; color: #666; margin: 5px 0;">저장 위치: public/images/products/v2/${product.id}/main/</p>
                         </div>
@@ -1270,8 +1269,8 @@ ${extractedProducts.length}개 제품의 이미지를 폴더 구조에 맞게 �
                     html += `
                         <div style="margin: 10px 0;">
                             <strong>🎯 호버 이미지:</strong><br>
-                            <a href="${product.instagramImage}" download="${product.id}-hover.${extension}" style="display: inline-block; padding: 8px 16px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; margin: 5px 0;" onclick="setTimeout(() => window.focus(), 100)">
-                                📥 ${product.id}-hover.${extension}
+                            <a href="${product.instagramImage}" download="${product.id}-hover.${extension}" style="display: inline-block; padding: 8px 16px; background: #28a745; color: white; text-decoration: none; border-radius: 4px; margin: 5px 0;">
+                                다운로드: ${product.id}-hover.${extension}
                             </a>
                             <p style="font-size: 12px; color: #666; margin: 5px 0;">저장 위치: public/images/products/v2/${product.id}/hover/</p>
                         </div>
@@ -1285,8 +1284,8 @@ ${extractedProducts.length}개 제품의 이미지를 폴더 구조에 맞게 �
                         const extension = color.thumbnail.includes('.webp') ? 'webp' : 'jpg';
                         const colorName = color.name.toLowerCase().replace(/\s+/g, '-');
                         html += `
-                            <a href="${color.thumbnail}" download="${product.id}-${colorName}.${extension}" style="display: inline-block; padding: 6px 12px; background: #ffc107; color: black; text-decoration: none; border-radius: 4px; margin: 3px;" onclick="setTimeout(() => window.focus(), 100)">
-                                📥 ${color.name}
+                            <a href="${color.thumbnail}" download="${product.id}-${colorName}.${extension}" style="display: inline-block; padding: 6px 12px; background: #ffc107; color: black; text-decoration: none; border-radius: 4px; margin: 3px;">
+                                ${color.name}
                             </a>
                         `;
                     });
@@ -1479,188 +1478,10 @@ downloadAllImages().catch(console.error);
                                 alert('스크립트를 선택했습니다. Ctrl+C로 복사하세요.');
                             });
                         }
-                    </` + `script>
+                    </script>
                 </body>
                 </html>
             `);
-        }
-
-        async function generateOfflineDownloadPage() {
-            if (extractedProducts.length === 0) {
-                alert('먼저 제품을 추출해주세요!');
-                return;
-            }
-
-            // 이미지를 Base64로 변환하는 함수
-            async function imageToBase64(url) {
-                try {
-                    const response = await fetch(url);
-                    const blob = await response.blob();
-                    return new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = () => resolve(reader.result);
-                        reader.readAsDataURL(blob);
-                    });
-                } catch (error) {
-                    console.error('이미지 로드 실패:', url, error);
-                    return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuydtOuvuOyngCDroZzrk5ztlZjsi6A8L3RleHQ+PC9zdmc+'; // 기본 placeholder
-                }
-            }
-
-            // 진행 상황 표시
-            const progressDiv = document.createElement('div');
-            progressDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:20px;border:2px solid #007bff;border-radius:8px;z-index:9999;text-align:center;min-width:300px;';
-            progressDiv.innerHTML = '<h3>🖼️ 이미지 변환 중...</h3><p id="convert-progress">0개 완료</p><p><small>잠시만 기다려주세요...</small></p>';
-            document.body.appendChild(progressDiv);
-
-            let convertedCount = 0;
-            let totalImages = 0;
-            
-            // 총 이미지 개수 계산
-            extractedProducts.forEach(product => {
-                if (product.mainImage) totalImages++;
-                if (product.instagramImage) totalImages++;
-                totalImages += product.colorVariants ? product.colorVariants.length : 0;
-            });
-
-            let html = `<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProductV2 오프라인 다운로드</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .product-card { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .product-images { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0; }
-        .image-item { text-align: center; }
-        .image-item img { max-width: 100%; height: 150px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
-        .download-btn { display: inline-block; padding: 8px 16px; background: #007bff; color: white; text-decoration: none; border-radius: 4px; margin: 5px; cursor: pointer; }
-        .download-btn:hover { background: #0056b3; }
-        .download-btn.hover { background: #28a745; }
-        .download-btn.color { background: #ffc107; color: black; }
-        .instructions { background: #e9ecef; padding: 15px; border-radius: 8px; margin: 20px 0; }
-        .folder-structure { background: #f8f9fa; padding: 10px; border-left: 3px solid #007bff; margin: 10px 0; font-family: monospace; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>📦 ProductV2 오프라인 다운로드 페이지</h1>
-        
-        <div class="instructions">
-            <h3>💡 사용법:</h3>
-            <ol>
-                <li>각 이미지 아래의 다운로드 버튼을 <strong>우클릭</strong> → "다른 이름으로 링크 저장"</li>
-                <li>파일명은 자동으로 설정되어 있습니다</li>
-                <li>아래 폴더 구조에 맞게 저장하세요</li>
-            </ol>
-            
-            <div class="folder-structure">
-                <strong>📁 권장 폴더 구조:</strong><br>
-                public/images/products/v2/<br>
-                ├── 제품명/main/ ← 메인 이미지<br>
-                ├── 제품명/hover/ ← 호버 이미지<br>
-                └── 제품명/colors/ ← 색상 변형들
-            </div>
-        </div>
-`;
-
-            // 각 제품별로 처리
-            for (const product of extractedProducts) {
-                html += `
-        <div class="product-card">
-            <h2>📦 ${product.name}</h2>
-            <p><strong>제품 ID:</strong> <code>${product.id}</code></p>
-            
-            <div class="product-images">
-`;
-
-                // 메인 이미지
-                if (product.mainImage) {
-                    document.getElementById('convert-progress').textContent = `${convertedCount}/${totalImages} 변환 중... (메인 이미지)`;
-                    const base64 = await imageToBase64(product.mainImage);
-                    const extension = product.mainImage.includes('.webp') ? 'webp' : 'jpg';
-                    html += `
-                <div class="image-item">
-                    <img src="${base64}" alt="메인 이미지">
-                    <br><strong>📸 메인 이미지</strong>
-                    <br><a href="${base64}" download="${product.id}-main.${extension}" class="download-btn">📥 다운로드</a>
-                    <p style="font-size: 12px; color: #666;">저장: public/images/products/v2/${product.id}/main/</p>
-                </div>
-`;
-                    convertedCount++;
-                }
-
-                // 호버 이미지
-                if (product.instagramImage) {
-                    document.getElementById('convert-progress').textContent = `${convertedCount}/${totalImages} 변환 중... (호버 이미지)`;
-                    const base64 = await imageToBase64(product.instagramImage);
-                    const extension = product.instagramImage.includes('.webp') ? 'webp' : 'jpg';
-                    html += `
-                <div class="image-item">
-                    <img src="${base64}" alt="호버 이미지">
-                    <br><strong>🎯 호버 이미지</strong>
-                    <br><a href="${base64}" download="${product.id}-hover.${extension}" class="download-btn hover">📥 다운로드</a>
-                    <p style="font-size: 12px; color: #666;">저장: public/images/products/v2/${product.id}/hover/</p>
-                </div>
-`;
-                    convertedCount++;
-                }
-
-                // 색상 변형들
-                if (product.colorVariants && product.colorVariants.length > 0) {
-                    for (const color of product.colorVariants) {
-                        document.getElementById('convert-progress').textContent = `${convertedCount}/${totalImages} 변환 중... (${color.name})`;
-                        const base64 = await imageToBase64(color.thumbnail);
-                        const extension = color.thumbnail.includes('.webp') ? 'webp' : 'jpg';
-                        const colorName = color.name.toLowerCase().replace(/\s+/g, '-');
-                        html += `
-                <div class="image-item">
-                    <img src="${base64}" alt="${color.name}">
-                    <br><strong>🎨 ${color.name}</strong>
-                    <br><a href="${base64}" download="${product.id}-${colorName}.${extension}" class="download-btn color">📥 다운로드</a>
-                    <p style="font-size: 12px; color: #666;">저장: public/images/products/v2/${product.id}/colors/</p>
-                </div>
-`;
-                        convertedCount++;
-                    }
-                }
-
-                html += `
-            </div>
-        </div>
-`;
-                await new Promise(resolve => setTimeout(resolve, 100)); // 잠깐 대기
-            }
-
-            html += `
-        <div style="text-align: center; margin: 40px 0; padding: 20px; background: #d4edda; border-radius: 8px;">
-            <h3>✅ 모든 이미지 변환 완료!</h3>
-            <p><strong>${totalImages}개</strong>의 이미지가 포함되었습니다.</p>
-            <p>이제 이 페이지를 <strong>Ctrl+S</strong>로 저장하거나, 각 이미지를 개별 다운로드하세요!</p>
-        </div>
-    </div>
-</body>
-</html>`;
-
-            // 새 창에서 완성된 HTML 표시
-            const newWindow = window.open('', '_blank');
-            newWindow.document.write(html);
-            newWindow.document.close();
-
-            // 진행 상황 창 제거
-            document.body.removeChild(progressDiv);
-
-            alert(`🎉 오프라인 다운로드 페이지 생성 완료!
-
-✨ 특징:
-- 모든 이미지가 Base64로 포함되어 오프라인에서도 표시
-- 새 창에서 Ctrl+S로 페이지 저장 가능
-- 개별 이미지 다운로드 가능
-- 폴더 구조 가이드 포함
-
-📁 ${totalImages}개 이미지가 포함되었습니다!`);
         }
 
         function clearAll() {

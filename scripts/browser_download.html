@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>브라우저 직접 다운로드</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .download-item { 
+            margin: 10px 0; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            background: #f9f9f9;
+        }
+        .download-btn {
+            background: #007bff;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 5px;
+            display: inline-block;
+        }
+        .download-btn:hover { background: #0056b3; }
+        .progress { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ 브라우저 직접 다운로드</h1>
+        <p>Cloudflare 때문에 Python 스크립트가 차단되므로, 브라우저에서 직접 다운로드합니다.</p>
+        
+        <div class="download-item">
+            <h3>📦 Bookcase in White with Doors</h3>
+            <a href="https://media.tylko.com/media/gallery/furniture_image/2022/05/Living_room_08_living-room-Bookcase_EAPgDsY.jpg" 
+               class="download-btn" download="bookcase-white-doors-main.webp">메인 이미지</a>
+            <a href="https://media.tylko.com/media/catalogue/catalogue_entry/2024/02/unreal_render_tasks/unreal_50.webp" 
+               class="download-btn" download="bookcase-white-doors-hover.webp">호버 이미지</a>
+            <a href="https://media.tylko.com/media/catalogue/catalogue_entry/2025/03/catalogue/catalogue_entry/2024/02/unreal_render_tasks/unreal_50_thumbnail.webp" 
+               class="download-btn" download="bookcase-white-doors-white.webp">White 색상</a>
+        </div>
+        
+        <div id="downloadList"></div>
+        
+        <button onclick="generateDownloadList()" style="background: #28a745; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-size: 16px; margin: 20px 0;">
+            🎯 전체 다운로드 링크 생성
+        </button>
+        
+        <div class="progress">
+            <p><strong>사용법:</strong></p>
+            <ol>
+                <li>위의 "전체 다운로드 링크 생성" 버튼 클릭</li>
+                <li>각 이미지 링크를 우클릭 → "다른 이름으로 링크 저장"</li>
+                <li>적절한 폴더에 저장 (bookcase-white-doors/main/ 등)</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // 여기에 추출된 제품 데이터를 붙여넣으세요
+        const extractedProducts = [
+            {
+                id: 'bookcase-white-doors',
+                name: 'Bookcase in White with Doors',
+                mainImage: 'https://media.tylko.com/media/gallery/furniture_image/2022/05/Living_room_08_living-room-Bookcase_EAPgDsY.jpg',
+                instagramImage: 'https://media.tylko.com/media/catalogue/catalogue_entry/2024/02/unreal_render_tasks/unreal_50.webp',
+                colorVariants: [
+                    {
+                        name: 'White',
+                        thumbnail: 'https://media.tylko.com/media/catalogue/catalogue_entry/2025/03/catalogue/catalogue_entry/2024/02/unreal_render_tasks/unreal_50_thumbnail.webp'
+                    }
+                ]
+            }
+            // 더 많은 제품 데이터...
+        ];
+        
+        function generateDownloadList() {
+            const container = document.getElementById('downloadList');
+            let html = '';
+            
+            extractedProducts.forEach(product => {
+                html += `
+                    <div class="download-item">
+                        <h3>📦 ${product.name}</h3>
+                        <div>
+                            <a href="${product.mainImage}" class="download-btn" download="${product.id}-main.webp">메인 이미지</a>
+                            <a href="${product.instagramImage}" class="download-btn" download="${product.id}-hover.webp">호버 이미지</a>
+                            ${product.colorVariants.map(color => 
+                                `<a href="${color.thumbnail}" class="download-btn" download="${product.id}-${color.name.toLowerCase()}.webp">${color.name} 색상</a>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
