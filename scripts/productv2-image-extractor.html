@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProductV2 이미지 추출기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .product {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        .product img {
+            max-width: 200px;
+            height: auto;
+            margin: 5px;
+            border: 1px solid #ccc;
+        }
+        .download-link {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin: 2px;
+            font-size: 12px;
+        }
+        .download-link:hover {
+            background: #1e7e34;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+        }
+        .v2-info {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .color-swatches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ ProductV2 이미지 추출기</h1>
+        <div class="v2-info">
+            <h3>✨ ProductV2 최적화 기능</h3>
+            <ul>
+                <li>📁 <code>public/images/products/v2/</code> 구조에 맞는 파일 저장</li>
+                <li>📝 <code>bookcase-{ID}-{type}.webp</code> 네이밍 규칙</li>
+                <li>🎨 색상 스와치 썸네일 자동 추출</li>
+                <li>🐍 Python 스크립트 자동 생성</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h3>1단계: HTML 코드 입력</h3>
+            <p>product-v2-example.txt 또는 Tylko.com 제품 페이지의 HTML을 붙여넣으세요.</p>
+            <textarea id="htmlInput" placeholder="여기에 HTML 코드를 붙여넣으세요..."></textarea>
+            <br>
+            <button onclick="extractProducts()">🔍 제품 정보 추출</button>
+            <button onclick="loadSampleData()">📄 샘플 데이터 로드</button>
+            <button onclick="clearAll()">🗑️ 초기화</button>
+        </div>
+        
+        <div class="section">
+            <h3>2단계: 추출 결과</h3>
+            <div id="results"></div>
+        </div>
+        
+        <div class="section">
+            <h3>3단계: ProductV2 다운로드</h3>
+            <button onclick="downloadV2JSON()">📄 ProductV2 JSON</button>
+            <button onclick="downloadV2CSV()">📊 ProductV2 CSV</button>
+            <button onclick="generateV2DownloadScript()">🐍 V2 Python 스크립트</button>
+            <button onclick="generateColorSwatchScript()">🎨 색상 스와치 스크립트</button>
+        </div>
+    </div>
+
+    <script>
+        let extractedProducts = [];
+
+        function loadSampleData() {
+            // 사용자가 제공한 실제 product-v2-example.txt HTML 샘플
+            const sampleHTML = `<div id="plp" class="md-max:px-0 grid-container mt-12"><ul class="grid grid-cols-2 gap-8 md:gap-16 lg:grid-cols-4" data-section="grid-v2-board"><!--[--><li data-testid="product-card"><figure class="flex flex-col h-full relative group/plp-product-card transition-all basic-transition hover:shadow-plp-product-card bg-white" data-index="0" preview="https://media.tylko.com/media/catalogue/catalogue_entry/2024/02/unreal_render_tasks/unreal_50.webp"><a href="/en-ot/furniture/bookcase/3516465,j,tall-slim-white-bookcase-with-doors-103x243x24cm" class="custom" data-testid="product-card-link"><!--[--><!--]--><!--[--><div class="relative w-full overflow-hidden aspect-square"><img src="https://media.tylko.com/media/gallery/furniture_image/2022/05/Living_room_08_living-room-Bookcase_EAPgDsY.jpg" alt="Bookcase in White with Doors" loading="eager" fetchpriority="high" class="object-cover absolute top-0 left-0" style="min-width:calc(100% + 1px);" data-testid="product-card-image-instagrid"><img src="https://media.tylko.com/media/catalogue/catalogue_entry/2024/02/unreal_render_tasks/unreal_50.webp" alt="Bookcase in White with Doors" loading="lazy" class="block group-hover/plp-product-card:opacity-100 group-hover/plp-product-card:scale-100 absolute inset-0 duration-500 ease-in-out opacity-0 transition-all z-1 transform scale-[1.04]" fetchpriority="low" style="min-width:calc(100% + 1px);" data-testid="product-card-image"><div class="semibold-12 px-8 py-2 rounded-4 absolute top-8 left-8 md:top-12 md:left-16 z-2 flex py-2 px-8" style="color:#FFFF66;background-color:#FF3C00;" data-testid="product-card-badge"><!--[-->-40% <span class="ml-4">&amp;</span><span class="ml-4">Free delivery</span><!--]--></div><!----><button class="outline-none ty-btn-icon configure-yours ty-btn-icon--m ty-btn-filled ty-btn-filled--dark hover:bg-white absolute bottom-8 lg:bottom-16 left-1/2 min-w-max -translate-x-1/2 translate-y-64 group-hover/plp-product-card:translate-y-0 md-max:translate-y-0 md-max:ty-btn-icon"></div></a><div class="flex flex-col justify-between h-full md:mt-4"><a href="/en-ot/furniture/bookcase/3516465,j,tall-slim-white-bookcase-with-doors-103x243x24cm" class="custom flex flex-col flex-1 p-8 md:p-16"><div class="flex flex-col flex-1"><p class="semibold-12 uppercase mb-8 md:mb-12 text-[#BE7958]" data-testid="product-card-label">Top seller</p><p class="semibold-14 text-neutral-900" data-testid="product-card-furniture-type">Original Modern</p><h2 class="line-clamp-1 normal-14 md:mt-2 text-neutral-750" data-testid="product-card-furniture-description">Bookcase in White with Doors</h2><h3 class="normal-14 md:mt-2 text-neutral-750" data-testid="product-card-furniture-size">103 x 243 cm</h3></div><aside class="semibold-16 text-neutral-900 mt-8 md:mt-12 text-neutral-900"><span class="semibold-16 text-orange mr-4" data-testid="product-card-price-discount">€1281</span><span class="normal-16 line-through text-neutral-900" data-testid="product-card-price">€2135</span></aside></a></div></figure></li></ul></div>`;
+            
+            document.getElementById('htmlInput').value = sampleHTML;
+        }
+
+        function extractProducts() {
+            const htmlContent = document.getElementById('htmlInput').value;
+            if (!htmlContent.trim()) {
+                alert('HTML 코드를 입력해주세요.');
+                return;
+            }
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlContent, 'text/html');
+            
+            const productCards = doc.querySelectorAll('[data-testid="product-card"]');
+            extractedProducts = [];
+
+            productCards.forEach((card, index) => {
+                // 제품명 먼저 추출
+                const nameElem = card.querySelector('[data-testid="product-card-furniture-description"]');
+                const productName = nameElem ? nameElem.textContent.trim() : `Product ${index + 1}`;
+                
+                const product = {
+                    id: generateProductFilename(productName) || `bookcase-${String(index + 1).padStart(3, '0')}`,
+                    name: productName,
+                    furnitureType: '',
+                    exactDimensions: '',
+                    mainImage: '',
+                    instagramImage: '',
+                    colorVariants: [],
+                    discountPrice: '',
+                    originalPrice: '',
+                    productUrl: '',
+                    labels: [],
+                    badges: []
+                };
+
+                // 가구 타입
+                const typeElem = card.querySelector('[data-testid="product-card-furniture-type"]');
+                if (typeElem) product.furnitureType = typeElem.textContent.trim();
+
+                // 정확한 치수
+                const sizeElem = card.querySelector('[data-testid="product-card-furniture-size"]');
+                if (sizeElem) product.exactDimensions = sizeElem.textContent.trim();
+
+                // 메인 이미지 (기본 표시되는 제품 이미지)
+                const mainImg = card.querySelector('[data-testid="product-card-image-instagrid"]');
+                if (mainImg) product.mainImage = mainImg.src || '';
+
+                // 호버 이미지 (마우스 오버 시 표시되는 이미지) 
+                const hoverImg = card.querySelector('[data-testid="product-card-image"]');
+                if (hoverImg) product.instagramImage = hoverImg.src || '';
+
+                // 색상 스와치들 추출
+                const colorSwatches = card.querySelectorAll('img[src*="thumbnail"], .swatch, [class*="swatch"]');
+                colorSwatches.forEach((swatch, swatchIndex) => {
+                    if (swatch.src && swatch.src.includes('thumbnail')) {
+                        const colorName = extractColorFromUrl(swatch.src) || `Color ${swatchIndex + 1}`;
+                        product.colorVariants.push({
+                            id: `${product.id}-${colorName.toLowerCase().replace(/\s+/g, '-')}`,
+                            name: colorName,
+                            thumbnail: swatch.src,
+                            mainImage: product.mainImage,
+                            instagramImage: product.instagramImage,
+                            isDefault: swatchIndex === 0,
+                            isSelected: swatchIndex === 0,
+                            availability: 'in_stock'
+                        });
+                    }
+                });
+
+                // 가격 정보
+                const discountElem = card.querySelector('[data-testid="product-card-price-discount"]');
+                if (discountElem) product.discountPrice = discountElem.textContent.trim();
+
+                const originalElem = card.querySelector('[data-testid="product-card-price"]');
+                if (originalElem) product.originalPrice = originalElem.textContent.trim();
+
+                // 제품 URL
+                const linkElem = card.querySelector('[data-testid="product-card-link"]');
+                if (linkElem) product.productUrl = linkElem.href || '';
+
+                // 라벨들
+                const labelElem = card.querySelector('[data-testid="product-card-label"]');
+                if (labelElem) {
+                    product.labels.push({
+                        text: labelElem.textContent.trim(),
+                        color: '#BE7958'
+                    });
+                }
+
+                // 배지 생성 (할인 정보 기반)
+                if (product.discountPrice && product.originalPrice) {
+                    product.badges.push({
+                        type: 'discount',
+                        text: '-40% & Free delivery',
+                        style: {
+                            backgroundColor: '#FF3C00',
+                            color: '#FFFF66'
+                        },
+                        priority: 1
+                    });
+                }
+
+                extractedProducts.push(product);
+            });
+
+            displayResults();
+        }
+
+        function extractColorFromUrl(url) {
+            // URL에서 색상명 추출 시도
+            const colorKeywords = ['white', 'grey', 'brown', 'black', 'green', 'blue', 'red', 'beige', 'sand', 'pink'];
+            const urlLower = url.toLowerCase();
+            
+            for (const color of colorKeywords) {
+                if (urlLower.includes(color)) {
+                    return color.charAt(0).toUpperCase() + color.slice(1);
+                }
+            }
+            
+            return null;
+        }
+
+        function generateProductFilename(productName) {
+            // "Bookcase in White with Doors" → "bookcase-white-doors"
+            return productName
+                .toLowerCase()
+                .replace(/\s+in\s+/gi, '-')      // " in " → "-"
+                .replace(/\s+with\s+/gi, '-')    // " with " → "-"  
+                .replace(/\s+and\s+/gi, '-')     // " and " → "-"
+                .replace(/[^a-z0-9\s-]/gi, '')   // 특수문자 제거
+                .replace(/\s+/g, '-')            // 공백 → "-"
+                .replace(/-+/g, '-')             // 연속 하이픈 → 단일 하이픈
+                .replace(/^-|-$/g, '');          // 앞뒤 하이픈 제거
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById('results');
+            if (extractedProducts.length === 0) {
+                resultsDiv.innerHTML = '<p>추출된 제품이 없습니다.</p>';
+                return;
+            }
+
+            let html = `<h4>🎯 총 ${extractedProducts.length}개 ProductV2 데이터 추출 완료</h4>`;
+            
+            extractedProducts.forEach((product, index) => {
+                html += `
+                <div class="product">
+                    <h5>📦 ${product.id}: ${product.name || 'N/A'}</h5>
+                    <p><strong>🏷️ 가구 타입:</strong> ${product.furnitureType || 'N/A'}</p>
+                    <p><strong>📏 정확한 치수:</strong> ${product.exactDimensions || 'N/A'}</p>
+                    <p><strong>💰 가격:</strong> ${product.discountPrice || 'N/A'} <del>${product.originalPrice || ''}</del></p>
+                    <p><strong>🏆 라벨:</strong> ${product.labels.map(l => l.text).join(', ') || 'N/A'}</p>
+                    
+                    <div>
+                        <strong>🖼️ V2 이미지들:</strong><br>
+                        ${product.mainImage ? `
+                            <div>
+                                <img src="${product.mainImage}" alt="메인 이미지" loading="lazy">
+                                <br><a href="${product.mainImage}" class="download-link" target="_blank">Main 다운로드</a>
+                                <small>→ <code>${product.id}-main.webp</code></small>
+                            </div>
+                        ` : ''}
+                        
+                        ${product.instagramImage ? `
+                            <div>
+                                <img src="${product.instagramImage}" alt="호버 이미지" loading="lazy">
+                                <br><a href="${product.instagramImage}" class="download-link" target="_blank">Hover 다운로드</a>
+                                <small>→ <code>${product.id}-hover.webp</code></small>
+                            </div>
+                        ` : ''}
+                        
+                        ${product.colorVariants.length > 0 ? `
+                            <div>
+                                <p><strong>🎨 색상 변형 (${product.colorVariants.length}개):</strong></p>
+                                <div class="color-swatches">
+                                    ${product.colorVariants.map((variant, i) => `
+                                        <div>
+                                            <img src="${variant.thumbnail}" alt="${variant.name}" class="color-swatch">
+                                            <br><small>${variant.name}</small>
+                                            <br><a href="${variant.thumbnail}" class="download-link" target="_blank">스와치</a>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>`;
+            });
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function downloadV2JSON() {
+            if (extractedProducts.length === 0) {
+                alert('먼저 제품 정보를 추출해주세요.');
+                return;
+            }
+
+            const dataStr = JSON.stringify({
+                version: '2.0',
+                extractedAt: new Date().toISOString(),
+                totalProducts: extractedProducts.length,
+                products: extractedProducts
+            }, null, 2);
+            
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'productv2-data.json';
+            link.click();
+        }
+
+        function downloadV2CSV() {
+            if (extractedProducts.length === 0) {
+                alert('먼저 제품 정보를 추출해주세요.');
+                return;
+            }
+
+            let csv = 'ID,Name,FurnitureType,ExactDimensions,DiscountPrice,OriginalPrice,MainImageURL,InstagramImageURL,ColorVariantsCount,Labels\n';
+            
+            extractedProducts.forEach(product => {
+                csv += `"${product.id}","${product.name}","${product.furnitureType}","${product.exactDimensions}","${product.discountPrice}","${product.originalPrice}","${product.mainImage}","${product.instagramImage}",${product.colorVariants.length},"${product.labels.map(l => l.text).join('; ')}"\n`;
+            });
+
+            const dataBlob = new Blob([csv], {type: 'text/csv'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'productv2-data.csv';
+            link.click();
+        }
+
+        function generateV2DownloadScript() {
+            if (extractedProducts.length === 0) {
+                alert('먼저 제품 정보를 추출해주세요.');
+                return;
+            }
+
+            let script = `#!/usr/bin/env python3
+# 🖼️ ProductV2 이미지 다운로드 스크립트
+# BEFUN ProductV2 구조에 최적화됨
+
+import requests
+import os
+import time
+from pathlib import Path
+from urllib.parse import urlparse
+
+def download_image(url, filepath):
+    """이미지를 다운로드하고 저장합니다."""
+    try:
+        print(f"📥 다운로드 중: {filepath}")
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Referer': 'https://tylko.com/'
+        }
+        
+        response = requests.get(url, headers=headers, stream=True, timeout=30)
+        response.raise_for_status()
+        
+        # 디렉토리 생성
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        
+        with open(filepath, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+        
+        print(f"✅ 완료: {filepath}")
+        return True
+        
+    except Exception as e:
+        print(f"❌ 실패 {url}: {e}")
+        return False
+
+def main():
+    """ProductV2 구조에 맞게 이미지 다운로드"""
+    
+    # 기본 경로 설정
+    base_path = Path("public/images/products/v2")
+    
+    # 디렉토리 생성
+    (base_path / "main").mkdir(parents=True, exist_ok=True)
+    (base_path / "hover").mkdir(parents=True, exist_ok=True)
+    (base_path / "thumbnail").mkdir(parents=True, exist_ok=True)
+    
+    success_count = 0
+    total_count = 0
+    
+    print("🚀 ProductV2 이미지 다운로드 시작...")
+    print(f"📁 저장 위치: {base_path}")
+    print()
+
+`;
+
+            extractedProducts.forEach((product, index) => {
+                script += `    # 📦 ${product.name}\n`;
+                
+                if (product.mainImage) {
+                    script += `    total_count += 1\n`;
+                    script += `    if download_image("${product.mainImage}", base_path / "main" / "${product.id}-main.webp"):\n`;
+                    script += `        success_count += 1\n`;
+                    script += `    time.sleep(0.5)\n\n`;
+                }
+                
+                if (product.instagramImage) {
+                    script += `    total_count += 1\n`;
+                    script += `    if download_image("${product.instagramImage}", base_path / "hover" / "${product.id}-hover.webp"):\n`;
+                    script += `        success_count += 1\n`;
+                    script += `    time.sleep(0.5)\n\n`;
+                }
+            });
+
+            script += `
+    print()
+    print("📊 다운로드 완료!")
+    print(f"✅ 성공: {success_count}/{total_count}")
+    print(f"❌ 실패: {total_count - success_count}")
+    print()
+    print("🎯 다음 단계:")
+    print("1. src/data/migration/imageMapping.ts 업데이트")
+    print("2. placeholder SVG를 실제 WebP로 교체")
+    print("3. ProductV2 컴포넌트에서 테스트")
+
+if __name__ == "__main__":
+    main()
+`;
+
+            const dataBlob = new Blob([script], {type: 'text/plain'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'download_productv2_images.py';
+            link.click();
+        }
+
+        function generateColorSwatchScript() {
+            if (extractedProducts.length === 0) {
+                alert('먼저 제품 정보를 추출해주세요.');
+                return;
+            }
+
+            // 모든 색상 스와치 URL 수집
+            const allSwatches = new Set();
+            extractedProducts.forEach(product => {
+                product.colorVariants.forEach(variant => {
+                    if (variant.thumbnail) {
+                        allSwatches.add(variant.thumbnail);
+                    }
+                });
+            });
+
+            let script = `#!/usr/bin/env python3
+# 🎨 색상 스와치 썸네일 다운로드 스크립트
+
+import requests
+import os
+import time
+from pathlib import Path
+
+def download_swatch(url, filename):
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Referer': 'https://tylko.com/'
+        }
+        
+        response = requests.get(url, headers=headers, stream=True, timeout=30)
+        response.raise_for_status()
+        
+        filepath = Path("public/images/products/v2/thumbnail") / filename
+        os.makedirs(filepath.parent, exist_ok=True)
+        
+        with open(filepath, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+        
+        print(f"✅ 스와치 다운로드: {filename}")
+        return True
+        
+    except Exception as e:
+        print(f"❌ 실패 {filename}: {e}")
+        return False
+
+def main():
+    print("🎨 색상 스와치 썸네일 다운로드...")
+    print()
+    
+`;
+
+            Array.from(allSwatches).forEach((swatchUrl, index) => {
+                const colorName = extractColorFromUrl(swatchUrl) || `swatch-${index + 1}`;
+                const filename = `swatch-${colorName.toLowerCase().replace(/\s+/g, '-')}.webp`;
+                
+                script += `    download_swatch("${swatchUrl}", "${filename}")\n`;
+                script += `    time.sleep(0.3)\n\n`;
+            });
+
+            script += `    print("🎯 색상 스와치 다운로드 완료!")
+
+if __name__ == "__main__":
+    main()
+`;
+
+            const dataBlob = new Blob([script], {type: 'text/plain'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'download_color_swatches.py';
+            link.click();
+        }
+
+        function clearAll() {
+            document.getElementById('htmlInput').value = '';
+            document.getElementById('results').innerHTML = '';
+            extractedProducts = [];
+        }
+    </script>
+</body>
+</html>

@@ -16,6 +16,7 @@ module.exports = {
       },
       scale: {
         '102': '1.02',
+        '104': '1.04',
         '105': '1.05',
       },
       borderRadius: {
@@ -69,10 +70,21 @@ module.exports = {
       width: {
         'card-active': '66.67%',
         'card-inactive': '11.11%',
+        '17': '4.25rem', // 68px for color swatches
+        '24': '6rem', // 96px for badges
+      },
+      height: {
+        '14': '3.5rem', // 56px for color swatches
       },
       backgroundSize: {
         '100': '100% 100%',
         '200': '200% 200%',
+      },
+      boxShadow: {
+        'plp-product-card': '0 8px 32px rgba(0, 0, 0, 0.12)',
+      },
+      letterSpacing: {
+        'wider': '0.1em',
       },
     },
   },

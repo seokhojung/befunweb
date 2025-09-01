@@ -28,7 +28,7 @@ export interface PricedEntity {
 
 // Money 타입 (기존과 동일하게 유지)
 export interface Money {
-  currency: 'KRW' | 'USD';
+  currency: 'KRW' | 'USD' | 'EUR';
   amount: number;
 }
 

@@ -1,23 +1,20 @@
-'use client';
-
-import { useEffect } from 'react';
 import { Layout } from '@/components/layout';
-import { ProductCard, CategoryCard } from '@/components/cards';
-import { PromoBanner } from '@/components/sections';
-import { sampleProducts } from '@/data/products';
-import { analytics } from '@/lib/analytics';
-import { Product } from '@/types';
+import { CategoryCard } from '@/components/cards';
+import { ProductGridV2, PromoBanner } from '@/components/sections';
+import { productsV2Data } from '@/data/productsV2';
 
-export default function ProductsPage() {
-  useEffect(() => {
-    analytics.pageView('/products', 'Befun 상품 목록');
-    analytics.viewItemList('products_main', '메인 상품 목록');
-  }, []);
+export const metadata = {
+  title: 'Products | BEFUN',
+  description: 'BEFUN 제품 페이지 - 새로운 제품 카탈로그에서 다양한 컬러와 옵션을 살펴보세요',
+  keywords: 'BEFUN, 가구, 북케이스, 제품, 색상 옵션, 맞춤형 가구',
+  openGraph: {
+    title: 'Products | BEFUN',
+    description: '새롭게 디자인된 제품 카탈로그',
+    type: 'website',
+  },
+};
 
-  const handleProductSelect = (product: Product) => {
-    analytics.selectItem(product.id, product.name, product.category || 'uncategorized');
-  };
-
+export default function ProductsV2Page() {
   return (
     <Layout>
       <div className="container mx-auto px-6 py-8 pt-20">
@@ -43,27 +40,25 @@ export default function ProductsPage() {
           <PromoBanner />
         </section>
 
-        {/* 상품 그리드 */}
-        <section 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-          role="grid"
-          aria-label="상품 목록"
-        >
-          {sampleProducts.map((product) => (
-            <div 
-              key={product.id} 
-              onClick={() => handleProductSelect(product)}
-              role="gridcell"
-            >
-              <ProductCard product={product} />
-            </div>
-          ))}
+        {/* V2 제품 그리드 */}
+        <section>
+          <ProductGridV2 
+            products={productsV2Data}
+            columns={{
+              mobile: 2,
+              tablet: 3, 
+              desktop: 4
+            }}
+            showSort={false}
+            showFilters={false}
+            maxItems={32} 
+          />
         </section>
 
         {/* 총 제품 수 */}
         <div className="mt-8 text-right">
           <p className="text-gray-600">
-            총 <span className="font-semibold">{sampleProducts.length}</span>개의 상품
+            총 <span className="font-semibold">{productsV2Data.length}</span>개의 상품
           </p>
         </div>
       </div>

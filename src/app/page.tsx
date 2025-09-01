@@ -1,7 +1,7 @@
-import { ProductGrid, BrandHighlights, HeroSection, Sustainability, ProductColorSection } from '@/components/sections';
+import { ProductGridV2, BrandHighlights, HeroSection, Sustainability, ProductColorSection } from '@/components/sections';
 import { Layout } from '@/components/layout';
 import { heroData } from '@/data/home';
-import { sampleProducts } from '@/data/products';
+import { productsV2Data } from '@/data/productsV2';
 
 export default function Home() {
   return (
@@ -15,8 +15,12 @@ export default function Home() {
       {/* 브랜드 하이라이트 섹션 */}
       <BrandHighlights />
 
-      {/* 추천 상품 그리드 섹션 */}
-      <ProductGrid products={sampleProducts.slice(0, 7)} title="우리의 인기 제품들" />
+      {/* 추천 상품 슬라이드 섹션 */}
+      <ProductGridV2 
+        products={productsV2Data.slice(0, 7)} 
+        title="우리의 인기 제품들"
+        slideMode={true}
+      />
 
       {/* 지속가능성 섹션 */}
       <Sustainability />
