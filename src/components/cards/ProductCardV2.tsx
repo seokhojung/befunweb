@@ -92,6 +92,14 @@ export const ProductCardV2 = React.memo(function ProductCardV2({ product, priori
             />
           )}
 
+          {/* Configure 버튼 */}
+          <ConfigureButton
+            productId={product.id}
+            productSlug={product.slug || product.id}
+            selectedColorId={selectedVariant.id}
+            isVisible={isHovered}
+          />
+
         </div>
 
         {/* 제품 정보 섹션 */}
@@ -119,7 +127,7 @@ export const ProductCardV2 = React.memo(function ProductCardV2({ product, priori
                 selectedId={selectedVariantId}
                 onSelect={handleColorChange}
                 maxDisplay={isMobile ? 4 : 8}
-                size={isMobile ? "xs" : "sm"}
+                size="sm"
               />
             )}
           </div>
