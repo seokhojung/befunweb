@@ -1,0 +1,52 @@
+GET http://localhost:3000/_next/image?url=%2Fimages%2Ftemp%2Fbookcase-white-main.webp&w=384&q=75 400 (Bad Request)
+
+
+C:\Users\apf_temp_ad…roductCardV2.tsx:50 TypeError: next_image__WEBPACK_IMPORTED_MODULE_2__.default is not a constructor
+    at ImageTransition.useEffect (C:\Users\apf_temp_ad…ransition.tsx:41:28)
+
+
+The above error occurred in the <ImageTransition> component. It was handled by the <ErrorBoundaryHandler> error boundary.
+<ImageTransition>		
+ProductCardV2	@	C:\Users\apf_temp_ad…roductCardV2.tsx:50
+<ProductCardV2>		
+eval	@	C:\Users\apf_temp_ad…oductGridV2.tsx:178
+ProductGridV2	@	C:\Users\apf_temp_ad…oductGridV2.tsx:172
+"use client"		
+ProductsV2Page	@	c:\Users\apf_temp_ad…ucts-v2\page.tsx:25
+<ProductsV2Page>		
+Function.all	@	VM2598 <anonymous>:1
+Function.all	@	VM2598 <anonymous>:1
+"use server"		
+(app-pages-browser)/./node_modules/next/dist/client/app-index.js	@	main-app.js?v=1756361045237:160
+(app-pages-browser)/./node_modules/next/dist/client/app-next-dev.js	@	main-app.js?v=1756361045237:182
+__webpack_exec__	@	main-app.js?v=1756361045237:1878
+(anonymous)	@	main-app.js?v=1756361045237:1879
+(anonymous)	@	main-app.js?v=1756361045237:9
+
+
+C:\Users\apf_temp_ad…cts-v2\error.tsx:15 Products V2 페이지 에러: TypeError: next_image__WEBPACK_IMPORTED_MODULE_2__.default is not a constructor
+    at ImageTransition.useEffect (C:\Users\apf_temp_ad…ransition.tsx:41:28)
+ProductsV2Error.useEffect	@	C:\Users\apf_temp_ad…cts-v2\error.tsx:15
+"use client"		
+Function.all	@	VM2598 <anonymous>:1
+Function.all	@	VM2598 <anonymous>:1
+"use server"		
+(app-pages-browser)/./node_modules/next/dist/client/app-index.js	@	main-app.js?v=1756361045237:160
+(app-pages-browser)/./node_modules/next/dist/client/app-next-dev.js	@	main-app.js?v=1756361045237:182
+__webpack_exec__	@	main-app.js?v=1756361045237:1878
+(anonymous)	@	main-app.js?v=1756361045237:1879
+(anonymous)	@	main-app.js?v=1756361045237:9
+
+
+C:\Users\apf_temp_ad…cts-v2\error.tsx:15 Products V2 페이지 에러: TypeError: next_image__WEBPACK_IMPORTED_MODULE_2__.default is not a constructor
+    at ImageTransition.useEffect (C:\Users\apf_temp_ad…ransition.tsx:41:28)
+ProductsV2Error.useEffect	@	C:\Users\apf_temp_ad…cts-v2\error.tsx:15
+"use client"		
+Function.all	@	VM2598 <anonymous>:1
+Function.all	@	VM2598 <anonymous>:1
+"use server"		
+(app-pages-browser)/./node_modules/next/dist/client/app-index.js	@	main-app.js?v=1756361045237:160
+(app-pages-browser)/./node_modules/next/dist/client/app-next-dev.js	@	main-app.js?v=1756361045237:182
+__webpack_exec__	@	main-app.js?v=1756361045237:1878
+(anonymous)	@	main-app.js?v=1756361045237:1879
+(anonymous)	@	main-app.js?v=1756361045237:9

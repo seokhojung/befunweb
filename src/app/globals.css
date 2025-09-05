@@ -261,28 +261,6 @@
   }
 }
 
-/* 다크 모드 지원 */
-@media (prefers-color-scheme: dark) {
-  .bg-white {
-    background-color: #1f2937;
-  }
-  
-  .text-gray-900 {
-    color: #f9fafb;
-  }
-  
-  .text-gray-700 {
-    color: #d1d5db;
-  }
-  
-  .text-gray-600 {
-    color: #e5e7eb;
-  }
-  
-  .border-gray-200 {
-    border-color: #374151;
-  }
-}
 
 /* BrandHighlights 카드 애니메이션 */
 .card-active-animation {
