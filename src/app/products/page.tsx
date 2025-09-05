@@ -17,7 +17,7 @@ export const metadata = {
 export default function ProductsV2Page() {
   return (
     <Layout>
-      <div className="container mx-auto px-6 py-8 pt-20">
+      <div className="container mx-auto px-3 md:px-6 py-6 md:py-8 pt-16 md:pt-20">
         {/* 페이지 제목 */}
         <header className="mb-8">
         <br/>

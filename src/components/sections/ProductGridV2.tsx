@@ -113,7 +113,7 @@ export const ProductGridV2 = React.memo(function ProductGridV2({
 
   // 그리드 클래스 생성 (정적 클래스 사용)
   const getGridClasses = (cols: typeof columns) => {
-    const baseClasses = 'grid gap-4 md:gap-6 lg:gap-8';
+    const baseClasses = 'grid gap-3 md:gap-4 lg:gap-6 xl:gap-8';
     
     // Tailwind에서 정적으로 인식할 수 있도록 명시적 클래스 매핑
     const mobileClasses = {
@@ -320,7 +320,7 @@ export function ProductGridV2Skeleton({
 }) {
   // 스켈레톤용 그리드 클래스 생성
   const getSkeletonGridClasses = (cols: typeof columns) => {
-    const baseClasses = 'grid gap-4 md:gap-6 lg:gap-8';
+    const baseClasses = 'grid gap-3 md:gap-4 lg:gap-6 xl:gap-8';
     
     const mobileClasses = {
       1: 'grid-cols-1',

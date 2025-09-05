@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { ProductV2 } from '@/types/productsV2';
 import { ColorSwatchGrid, ImageTransition, ProductBadges, ConfigureButton } from '@/components/ui';
@@ -28,6 +28,20 @@ export const ProductCardV2 = React.memo(function ProductCardV2({ product, priori
   
   // 호버 상태 관리
   const [isHovered, setIsHovered] = useState(false);
+  
+  // 모바일 감지
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleColorChange = (variantId: string, event?: React.MouseEvent) => {
     // 링크 클릭 방지
@@ -78,68 +92,54 @@ export const ProductCardV2 = React.memo(function ProductCardV2({ product, priori
             />
           )}
 
-          {/* Configure 버튼 */}
-          <ConfigureButton
-            productId={product.id}
-            productSlug={product.slug || product.id}
-            selectedColorId={selectedVariant.id}
-            isVisible={isHovered}
-          />
-
-          {/* 색상 변형 개수 표시 */}
-          {product.colorVariants.length > 1 && (
-            <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-xs text-gray-600 z-10">
-              {product.colorVariants.length} colors
-            </div>
-          )}
         </div>
 
         {/* 제품 정보 섹션 */}
-        <div className="p-6 flex flex-col flex-grow">
+        <div className="p-3 md:p-4 lg:p-6 flex flex-col flex-grow">
           {/* 제품명 */}
-          <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-gray-700 transition-colors min-h-[3rem] flex items-start" title={`${product.name} - ${selectedVariant.name}`}>
+          <h3 className="font-semibold text-sm md:text-base text-gray-900 mb-2 line-clamp-4 group-hover:text-gray-700 transition-colors h-16 md:h-20 flex items-start" title={`${product.name} - ${selectedVariant.name}`}>
             {product.name} - {selectedVariant.name}
           </h3>
           
           {/* 가구 타입 */}
-          <p className="text-sm text-gray-500 mb-1 capitalize">
+          <p className="text-xs md:text-sm text-gray-500 mb-1 capitalize">
             {product.furnitureType || product.category}
           </p>
           
           {/* 정확한 치수 */}
-          <p className="text-sm text-gray-500 mb-3">
+          <p className="text-xs md:text-sm text-gray-500 mb-2 md:mb-3">
             {product.exactDimensions}
           </p>
           
           {/* 색상 스와치 그리드 */}
-          <div className="mb-4 min-h-[40px] flex items-start" onClick={(e) => e.stopPropagation()}>
+          <div className="mb-3 md:mb-4 min-h-[32px] md:min-h-[40px] flex items-start" onClick={(e) => e.stopPropagation()}>
             {product.colorVariants.length > 1 && (
               <ColorSwatchGrid
                 variants={product.colorVariants}
                 selectedId={selectedVariantId}
                 onSelect={handleColorChange}
-                maxDisplay={6}
-                size="sm"
+                maxDisplay={isMobile ? 4 : 8}
+                size={isMobile ? "xs" : "sm"}
               />
             )}
           </div>
 
           {/* 가격 섹션 - 하단 고정 */}
-          <div className="flex justify-between items-center mt-auto">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end mt-auto gap-2">
+            <div className="flex flex-col gap-1">
               {product.originalPrice && product.originalPrice.amount > product.price.amount && (
-                <span className="text-sm text-gray-400 line-through">
+                <span className="text-xs md:text-sm text-gray-400 line-through">
                   {convertAndFormatPrice(product.originalPrice)}
                 </span>
               )}
-              <span className="text-lg font-bold text-gray-900">
+              <span className="text-base md:text-lg font-bold text-gray-900">
                 {convertAndFormatPrice(product.price)}
               </span>
             </div>
             
             {/* 할인율 표시 */}
             {product.originalPrice && product.originalPrice.amount > product.price.amount && (
-              <span className="text-sm font-medium text-red-600 bg-red-50 px-2 py-1 rounded">
+              <span className="text-xs md:text-sm font-medium text-red-600 bg-red-50 px-2 py-1 rounded self-start sm:self-auto">
                 -{calculateDiscountRate(product.originalPrice, product.price)}%
               </span>
             )}
